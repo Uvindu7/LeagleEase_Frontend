@@ -12,13 +12,14 @@ import BrowseLawyers from "./pages/BrowseLawyers";
 import AppointmentBooking from "./pages/AppointmentBooking";
 import LawyerProfilePage from "./pages/LawyerProfile";
 import PaymentPage from "./pages/PaymentPage";
+import Start from "./pages/Start";
 
 function App() {
   return (
     <Router>
       <Routes>
         // Default Route 
-        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
 
         // Admin Dashboard 
         <Route path="/admin" element={<AdminDashboard />} />
@@ -46,6 +47,9 @@ function App() {
 
         //PaymentPage
         <Route path="/paymentpage" element={<PaymentPage/>}/>
+
+        //Start
+        <Route path="/" element={<Start/>}/>
 
       </Routes>
     </Router>

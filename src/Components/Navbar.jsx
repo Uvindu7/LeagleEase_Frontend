@@ -6,6 +6,12 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate(); // React Router hook
 
+    const menuItems = [
+    { label: "Home", path: "/home" },
+    { label: "About", path: "/about" },
+    { label: "Features", path: "/features" },
+  ];
+
   return (
     <nav className="fixed top-0 left-0 w-full bg-[#4b4030cc] backdrop-blur-md shadow-lg z-50">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-12 py-4 relative">
@@ -16,18 +22,19 @@ const Navbar = () => {
         </div>
 
         {/* Central Nav Links */}
-        <div className="hidden md:flex flex-1 justify-center">
-          <ul className="flex space-x-12 font-semibold text-lg text-[#f3d999cc] select-none">
-            {["Home", "About", "Features"].map((item) => (
-              <li
-                key={item}
-                className="hover:text-white cursor-pointer transition"
-              >
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
+      <div className="hidden md:flex flex-1 justify-center">
+        <ul className="flex space-x-12 font-semibold text-lg text-[#f3d999cc] select-none">
+          {menuItems.map((item) => (
+            <li
+              key={item.label}
+              onClick={() => navigate(item.path)}
+              className="hover:text-white cursor-pointer transition"
+            >
+              {item.label}
+            </li>
+          ))}
+        </ul>
+      </div>
 
         {/* Action Buttons */}
         <div className="hidden md:flex items-center space-x-6 z-20">
