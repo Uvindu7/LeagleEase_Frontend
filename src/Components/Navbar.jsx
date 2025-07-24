@@ -39,7 +39,7 @@ const Navbar = () => {
         {/* Action Buttons */}
         <div className="hidden md:flex items-center space-x-6 z-20">
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/home')}
             className="bg-[#f3d999] text-[#4b4030] font-semibold px-6 py-2 rounded-full shadow-lg hover:scale-105 transform transition duration-300 focus:outline-none focus:ring-2 focus:ring-[#f3d999]"
           >
             Login
@@ -78,7 +78,7 @@ const Navbar = () => {
 
             <button
               onClick={() => {
-                navigate('/');
+                navigate('/login');
                 setMenuOpen(false);
               }}
               className="w-3/4 mx-auto bg-[#f3d999] text-[#4b4030] font-semibold px-5 py-2 rounded-full shadow-lg hover:scale-105 transform transition duration-300 focus:outline-none focus:ring-2 focus:ring-[#f3d999]"
