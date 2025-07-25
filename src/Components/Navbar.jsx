@@ -6,7 +6,7 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate(); // React Router hook
 
-    const menuItems = [
+  const menuItems = [
     { label: "Home", path: "/home" },
     { label: "About", path: "/about" },
     { label: "Features", path: "/features" },
@@ -22,37 +22,46 @@ const Navbar = () => {
         </div>
 
         {/* Central Nav Links */}
-      <div className="hidden md:flex flex-1 justify-center">
-        <ul className="flex space-x-12 font-semibold text-lg text-[#f3d999cc] select-none">
-          {menuItems.map((item) => (
-            <li
-              key={item.label}
-              onClick={() => navigate(item.path)}
-              className="hover:text-white cursor-pointer transition"
-            >
-              {item.label}
-            </li>
-          ))}
-        </ul>
-      </div>
+        <div className="hidden md:flex flex-1 justify-center">
+          <ul className="flex space-x-12 font-semibold text-lg text-[#f3d999cc] select-none">
+            {menuItems.map((item) => (
+              <li
+                key={item.label}
+                onClick={() => navigate(item.path)}
+                className="hover:text-white cursor-pointer transition"
+              >
+                {item.label}
+              </li>
+            ))}
+          </ul>
+        </div>
 
         {/* Action Buttons */}
         <div className="hidden md:flex items-center space-x-6 z-20">
           <button
-            onClick={() => navigate('/home')}
+            onClick={() => navigate('/login')}
             className="bg-[#f3d999] text-[#4b4030] font-semibold px-6 py-2 rounded-full shadow-lg hover:scale-105 transform transition duration-300 focus:outline-none focus:ring-2 focus:ring-[#f3d999]"
           >
             Login
           </button>
-            <button
+
+          <button
             onClick={() => navigate('/register')}
             className="bg-[#f3d999] text-[#4b4030] font-semibold px-6 py-2 rounded-full shadow-lg hover:scale-105 transform transition duration-300 focus:outline-none focus:ring-2 focus:ring-[#f3d999]"
           >
             Sign Up
           </button>
+
+          {/* Logout Button */}
+          <button
+            onClick={() => navigate('/')}
+            className="bg-[#f3d999] text-[#4b4030] font-semibold px-6 py-2 rounded-full shadow-lg hover:scale-105 transform transition duration-300 focus:outline-none focus:ring-2 focus:ring-red-300"
+          >
+            Logout
+          </button>
         </div>
 
-        {/* Hamburger */}
+        {/* Hamburger Icon */}
         <div className="md:hidden z-30">
           <button
             onClick={() => setMenuOpen(!menuOpen)}
@@ -66,13 +75,16 @@ const Navbar = () => {
         {/* Mobile Menu */}
         {menuOpen && (
           <div className="md:hidden bg-[#4b4030cc] backdrop-blur-md shadow-inner py-8 space-y-6 text-center text-lg font-semibold text-[#f3d999cc] rounded-b-lg absolute top-full left-0 w-full z-20">
-            {["Home", "About", "Features"].map((item) => (
+            {menuItems.map((item) => (
               <div
-                key={item}
+                key={item.label}
                 className="hover:text-white cursor-pointer transition"
-                onClick={() => setMenuOpen(false)}
+                onClick={() => {
+                  navigate(item.path);
+                  setMenuOpen(false);
+                }}
               >
-                {item}
+                {item.label}
               </div>
             ))}
 
@@ -87,14 +99,25 @@ const Navbar = () => {
             </button>
 
             <button
-              className="w-3/4 mx-auto flex items-center justify-center bg-gradient-to-r from-[#f3d999] via-[#e6ca73] to-[#d1b852] text-[#4b4030] font-semibold px-5 py-2 rounded-full shadow-lg hover:scale-110 transform transition duration-300 space-x-2 focus:outline-none focus:ring-2 focus:ring-[#f3d999]"
               onClick={() => {
                 navigate('/register');
                 setMenuOpen(false);
               }}
+              className="w-3/4 mx-auto flex items-center justify-center bg-gradient-to-r from-[#f3d999] via-[#e6ca73] to-[#d1b852] text-[#4b4030] font-semibold px-5 py-2 rounded-full shadow-lg hover:scale-110 transform transition duration-300 space-x-2 focus:outline-none focus:ring-2 focus:ring-[#f3d999]"
             >
               <UserPlus className="w-5 h-5" />
               <span>Sign Up</span>
+            </button>
+
+            {/* Logout Button for Mobile */}
+            <button
+              onClick={() => {
+                navigate('/');
+                setMenuOpen(false);
+              }}
+              className="w-3/4 mx-auto bg-[#f3d999] text-[#4b4030] font-semibold px-5 py-2 rounded-full shadow-lg hover:scale-105 transform transition duration-300 focus:outline-none focus:ring-2 focus:ring-red-300"
+            >
+              Logout
             </button>
           </div>
         )}
