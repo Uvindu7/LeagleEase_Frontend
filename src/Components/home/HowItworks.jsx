@@ -18,7 +18,7 @@ const steps = [
     title: 'Book a Lawyer',
     desc: 'Find the perfect lawyer for your specific legal needs quickly and easily.',
     img: im2,
-    link: '/book-lawyer'
+    link: '/browselawyers'
   },
   {
     step: '3',

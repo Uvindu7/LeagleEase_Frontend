@@ -7,6 +7,7 @@ const Navbar = () => {
   const navigate = useNavigate(); // React Router hook
 
   const menuItems = [
+    { label: "My Account", path: "/client"},
     { label: "Home", path: "/home" },
     { label: "About", path: "/about" },
     { label: "Features", path: "/features" },

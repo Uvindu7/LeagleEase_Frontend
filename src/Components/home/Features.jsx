@@ -12,18 +12,21 @@ const features = [
     title: 'Verified Lawyers',
     desc: 'All professionals are carefully background checked and verified.',
     bgImage: bgImage1,
+    link: '/browselawyers',
   },
   {
     icon: <Video className="text-white w-12 h-12" />,
     title: 'Video Consultations',
     desc: 'Easily connect with lawyers via secure and private video calls.',
     bgImage: bgImage2,
+    link: '',
   },
   {
     icon: <Lock className="text-white w-12 h-12" />,
     title: 'Secure Payments',
     desc: 'We provide safe, encrypted, and seamless transaction methods.',
     bgImage: bgImage3,
+    link: '/paymentpage',
   },
 ];
 
