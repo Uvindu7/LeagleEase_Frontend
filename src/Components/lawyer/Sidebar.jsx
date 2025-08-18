@@ -47,7 +47,7 @@ const Sidebar = ({ isOpen, onClose, onOpen }) => {
 
         {/* Navigation Links */}
         <nav className="flex flex-col gap-3">
-          {["Dashboard", "Appointments", "Messages", "Calendar", "Profile", "Logout"].map(
+          {["Dashboard", "Appointments", "Messages", "Calendar", "Setting"].map(
             (item) => (
               <a
                 key={item}

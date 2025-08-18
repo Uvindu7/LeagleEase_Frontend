@@ -5,6 +5,11 @@ import profileImage from '../../assets/lawyerprofile.jpg';
 const TopBar = () => {
   const navigate = useNavigate();
 
+  // Navigate only to home
+  const goHome = () => {
+    navigate('/home'); // Home page
+  };
+
   const handleLogout = () => {
     // Optional: Clear session or token here
     navigate('/'); // Redirect to homepage
@@ -36,15 +41,13 @@ const TopBar = () => {
           </svg>
         </button>
 
-        {/* Profile Section */}
-        <div className="flex items-center gap-3 cursor-pointer hover:bg-gray-100 px-3 py-1 rounded-lg transition duration-300">
-          <img
-            src={profileImage}
-            alt="Profile"
-            className="w-10 h-10 rounded-full border-2 border-[#3e352a]"
-          />
-          <span className="font-medium text-[#3e352a]">Lawyer Name</span>
-        </div>
+        <button
+          onClick={goHome}
+          className="bg-[#3e352a] text-white px-5 py-2 rounded-full hover:bg-[#4e4234] transition font-medium shadow"
+        >
+          Home
+        </button>
+        
 
         {/* Logout Button */}
         <button
