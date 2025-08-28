@@ -11,21 +11,18 @@ const steps = [
     title: 'Register',
     desc: 'Create your free LegalEase account and start your legal journey with ease.',
     img: im1,
-    link: '/register'
   },
   {
     step: '2',
     title: 'Book a Lawyer',
     desc: 'Find the perfect lawyer for your specific legal needs quickly and easily.',
     img: im2,
-    link: '/browselawyers'
   },
   {
     step: '3',
     title: 'Join Consultation',
     desc: 'Securely meet your lawyer via video call from anywhere at your convenience.',
     img: im3,
-    link: '/consultation'
   }
 ];
 

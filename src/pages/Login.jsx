@@ -16,7 +16,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost/BackEnd/api/Login.php", {
+      const res = await fetch("http://localhost/backend/api/login.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import backgroundImg from '../assets/browse lawyer bg.jpg';
+import { Link } from "react-router-dom";
 
 import tharinduImg from '../assets/lawyers/Tharindu Perera.jpg';
 import dilaniImg from '../assets/lawyers/Dilani Fernando.jpg';
@@ -194,9 +195,14 @@ const BrowseLawyers = () => {
                     <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
                       View Profile
                     </button>
-                    <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm">
+                    <Link
+                      to="/bookappointment"
+                      state={{ lawyer }} // pass the selected lawyer object
+                      className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm text-center"
+                    >
                       Book Now
-                    </button>
+                    </Link>
+
                   </div>
                 </div>
               ))}
