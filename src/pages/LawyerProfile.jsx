@@ -1,36 +1,34 @@
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { CheckBadgeIcon, CalendarDaysIcon } from "@heroicons/react/24/solid";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import backgroundImg from "../assets/background.webp";
 
-const lawyerData = {
-  name: "Adv. Asha Mehra",
-  image: "https://randomuser.me/api/portraits/women/68.jpg",
-  specialization: "Criminal Law",
-  yearsExperience: 12,
-  verified: true,
-  availability: [
-    { date: "2025-07-21", slots: ["10:00", "14:00", "16:00"] },
-    { date: "2025-07-23", slots: ["09:00", "15:00"] },
-  ],
-  fee: 1500,
-};
-
 export default function LawyerProfilePage() {
+  const location = useLocation();
+  const { lawyer } = location.state || {}; // get lawyer data from BrowseLawyers
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedSlot, setSelectedSlot] = useState("");
 
-  // Helper: return all unique dates
-  const allDates = lawyerData.availability.map((d) => d.date);
-
-  // Find slots for a selected date
-  function slotsForDate(date) {
-    const entry = lawyerData.availability.find((d) => d.date === date);
-    return entry ? entry.slots : [];
+  if (!lawyer) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center">
+          <p className="text-xl">No lawyer selected. Please go back and select a lawyer.</p>
+        </div>
+        <Footer />
+      </div>
+    );
   }
 
-  // Toggle slot selection on click
+  // Dummy availability (can later come from backend)
+  const availability = [
+    { date: "2025-07-21", slots: ["10:00", "14:00", "16:00"] },
+    { date: "2025-07-23", slots: ["09:00", "15:00"] },
+  ];
+
   function handleSlot(date, slot) {
     if (selectedDate === date && selectedSlot === slot) {
       setSelectedDate("");
@@ -57,35 +55,38 @@ export default function LawyerProfilePage() {
           <div className="flex flex-col items-center">
             <img
               className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
-              src={lawyerData.image}
-              alt={lawyerData.name}
+              src={lawyer.image_url}
+              alt={lawyer.name}
             />
             <div className="mt-6 text-center w-full">
               <div className="flex items-center justify-center gap-2">
                 <h2 className="text-2xl font-bold text-[#6e4e13] drop-shadow">
-                  {lawyerData.name}
+                  {lawyer.name}
                 </h2>
-                {lawyerData.verified && (
+                {lawyer.verified && (
                   <CheckBadgeIcon
                     className="w-6 h-6 text-green-500"
                     title="Verified"
                   />
                 )}
               </div>
-              <div className="text-[#8a7750]">{lawyerData.specialization}</div>
+              <div className="text-[#8a7750]">{lawyer.specialization}</div>
               <div className="text-[#ac9770] text-sm">
-                {lawyerData.yearsExperience} years of experience
+                {lawyer.yearsExperience
+                  ? `${lawyer.yearsExperience} years of experience`
+                  : "Experience info not available"}
               </div>
             </div>
           </div>
 
+          {/* Availability */}
           <div>
             <div className="flex items-center mb-2 text-[#6e4e13]">
               <CalendarDaysIcon className="w-5 h-5 text-gold-500 mr-2" />
               <span className="font-medium">Select a Time Slot:</span>
             </div>
             <div className="flex flex-col gap-2">
-              {lawyerData.availability.map((day) => (
+              {availability.map((day) => (
                 <div key={day.date} className="flex items-center gap-2">
                   <span className="text-[#6e4e13] w-24 font-medium">
                     {day.date}
@@ -115,14 +116,17 @@ export default function LawyerProfilePage() {
             </div>
           </div>
 
+          {/* Fee */}
           <div>
             <span className="font-medium text-[#6e4e13]">
               Fee per consultation:{" "}
             </span>
             <span className="text-green-700 font-semibold">
-              Rs. {lawyerData.fee}
+              Rs. {lawyer.fee}
             </span>
           </div>
+
+          {/* Book Button */}
           <button
             disabled={!selectedSlot}
             className={`w-full py-2 font-semibold rounded transition shadow ${
@@ -139,3 +143,4 @@ export default function LawyerProfilePage() {
     </div>
   );
 }
+

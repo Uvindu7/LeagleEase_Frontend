@@ -10,8 +10,6 @@ import gaminiImg from '../assets/lawyers/Gamini Jayasinghe.jpg';
 import nadeeshaImg from '../assets/lawyers/Nadeesha Silva.jpg';
 import ruwanImg from '../assets/lawyers/Ruwan Gunasekara.jpg';
 
-
-
 const BrowseLawyers = () => {
   const [lawyers, setLawyers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,8 +20,7 @@ const BrowseLawyers = () => {
   const [maxFee, setMaxFee] = useState('');
 
   useEffect(() => {
-
-    //Sample lawyer dara cards.. 
+    // Sample lawyer data
     const sampleData = [
       {
         id: 1,
@@ -33,6 +30,8 @@ const BrowseLawyers = () => {
         fee: 9000,
         bio: "Young and energetic defense lawyer with a fresh perspective.",
         image_url: tharinduImg,
+        verified: true,
+        yearsExperience: 3,
       },
       {
         id: 2,
@@ -42,6 +41,8 @@ const BrowseLawyers = () => {
         fee: 10000,
         bio: "Specialist in divorce, custody, and adoption cases.",
         image_url: dilaniImg,
+        verified: true,
+        yearsExperience: 6,
       },
       {
         id: 3,
@@ -51,6 +52,8 @@ const BrowseLawyers = () => {
         fee: 25000,
         bio: "Handles corporate mergers, acquisitions, and contracts for international firms.",
         image_url: gaminiImg,
+        verified: false,
+        yearsExperience: 15,
       },
       {
         id: 4,
@@ -60,6 +63,8 @@ const BrowseLawyers = () => {
         fee: 12000,
         bio: "Passionate about helping families through legal processes smoothly.",
         image_url: nadeeshaImg,
+        verified: true,
+        yearsExperience: 4,
       },
       {
         id: 5,
@@ -69,29 +74,13 @@ const BrowseLawyers = () => {
         fee: 15000,
         bio: "Experienced criminal defense lawyer with over 10 years in high-profile cases.",
         image_url: ruwanImg,
+        verified: true,
+        yearsExperience: 11,
       }
     ];
 
-    /*
-    === connect database to get lawyer details ===
-
     setLawyers(sampleData);
     setLoading(false);
-
-     fetch(" ") //backend php file location
-      .then((res) => res.json())
-      .then((data) => {
-        setLawyers(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching lawyers:", error);
-        setLoading(false);
-      });
-    */
-
-  setLawyers(sampleData);
-  setLoading(false);
   }, []);
 
   const filteredLawyers = lawyers.filter((lawyer) => {
@@ -114,7 +103,7 @@ const BrowseLawyers = () => {
 
         {/* Sidebar / Filters */}
         <div className="w-1/4 h-[calc(100vh-64px)] sticky top-[64px] bg-gradient-to-b from-[#f1e4c3df] via-[#c5a473d3] to-[#6e4d1ee5] p-6 text-black overflow-y-auto">
-        <h2 className="text-2xl font-semibold mb-4 border-b-2 border-b-black">Filters</h2>
+          <h2 className="text-2xl font-semibold mb-4 border-b-2 border-b-black">Filters</h2>
           <label className="block mb-1 font-medium">Specialization</label>
           <select
             className="w-full mb-4 p-2 border rounded bg-[#c5a473] text-black"
@@ -124,7 +113,7 @@ const BrowseLawyers = () => {
             <option value="">All</option>
             <option value="Criminal Law">Criminal Law</option>
             <option value="Family Law">Family Law</option>
-            <option value="Corporate Law">Corporate Law</option>s
+            <option value="Corporate Law">Corporate Law</option>
           </select>
 
           <label className="block mb-1 font-medium">Rating</label>
@@ -146,7 +135,7 @@ const BrowseLawyers = () => {
             <input
               type="number"
               placeholder="Min"
-              className="w-1/2 p-2 border rounded bg-[#c5a473] text-black focus:outline-none focus:ring-2 focus:ring-[#b89450]"
+              className="w-1/2 p-2 border rounded bg-[#c5a473] text-black"
               step="5000"
               min="0"
               max="40000"
@@ -156,7 +145,7 @@ const BrowseLawyers = () => {
             <input
               type="number"
               placeholder="Max"
-              className="w-1/2 p-2 border rounded bg-[#c5a473] text-black focus:outline-none focus:ring-2 focus:ring-[#b89450]"
+              className="w-1/2 p-2 border rounded bg-[#c5a473] text-black"
               step="5000"
               min="10000"
               max="50000"
@@ -192,17 +181,20 @@ const BrowseLawyers = () => {
                   <p className="text-sm">Fee: LKR {lawyer.fee}</p>
                   <p className="text-sm text-gray-700 mt-2">{lawyer.bio}</p>
                   <div className="flex justify-between mt-4">
-                    <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
+                    <Link
+                      to="/lawyerprofile"
+                      state={{ lawyer }} // pass lawyer details
+                      className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm text-center"
+                    >
                       View Profile
-                    </button>
+                    </Link>
                     <Link
                       to="/bookappointment"
-                      state={{ lawyer }} // pass the selected lawyer object
+                      state={{ lawyer }}
                       className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm text-center"
                     >
                       Book Now
                     </Link>
-
                   </div>
                 </div>
               ))}
@@ -217,3 +209,4 @@ const BrowseLawyers = () => {
 };
 
 export default BrowseLawyers;
+
