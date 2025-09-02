@@ -5,6 +5,7 @@ import { CalendarDaysIcon, ClockIcon } from "@heroicons/react/24/outline";
 const CalendarSection = () => {
   const [slots, setSlots] = useState([]);
   const [loading, setLoading] = useState(true);
+<<<<<<< Updated upstream
   const [message, setMessage] = useState("");
 
   const fetchSlots = async () => {
@@ -33,6 +34,20 @@ const CalendarSection = () => {
 
   useEffect(() => {
     fetchSlots();
+=======
+
+  useEffect(() => {
+    fetch("http://localhost/project/get_available_slots.php")
+      .then((res) => res.json())
+      .then((data) => {
+        setSlots(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching slots:", err);
+        setLoading(false);
+      });
+>>>>>>> Stashed changes
   }, []);
 
   return (
@@ -50,8 +65,11 @@ const CalendarSection = () => {
         <div className="flex justify-center items-center h-40">
           <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
         </div>
+<<<<<<< Updated upstream
       ) : message ? (
         <div className="text-center text-red-500 font-medium">{message}</div>
+=======
+>>>>>>> Stashed changes
       ) : (
         <div className="space-y-6">
           {slots.map((day, index) => (
@@ -76,7 +94,11 @@ const CalendarSection = () => {
                 </p>
 
                 {/* Slots */}
+<<<<<<< Updated upstream
                 {day.available_slots && day.available_slots.length > 0 ? (
+=======
+                {day.available_slots.length > 0 ? (
+>>>>>>> Stashed changes
                   <div className="flex flex-wrap gap-2 mt-3">
                     {day.available_slots.map((slot, i) => (
                       <span
