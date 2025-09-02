@@ -5,18 +5,34 @@ import { CalendarDaysIcon, ClockIcon } from "@heroicons/react/24/outline";
 const CalendarSection = () => {
   const [slots, setSlots] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState("");
+
+  const fetchSlots = async () => {
+    try {
+      const res = await fetch("http://localhost/LegalEase_Backend/api/get_available_slots.php", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include", // if you are using sessions/cookies
+      });
+
+      const data = await res.json();
+
+      if (Array.isArray(data)) {
+        setSlots(data);
+        setMessage("");
+      } else {
+        setMessage(data.message || "No available slots found.");
+      }
+    } catch (err) {
+      console.error("Error fetching slots:", err);
+      setMessage("Error connecting to server.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    fetch("http://localhost/project/get_available_slots.php")
-      .then((res) => res.json())
-      .then((data) => {
-        setSlots(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching slots:", err);
-        setLoading(false);
-      });
+    fetchSlots();
   }, []);
 
   return (
@@ -34,6 +50,8 @@ const CalendarSection = () => {
         <div className="flex justify-center items-center h-40">
           <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
         </div>
+      ) : message ? (
+        <div className="text-center text-red-500 font-medium">{message}</div>
       ) : (
         <div className="space-y-6">
           {slots.map((day, index) => (
@@ -58,7 +76,7 @@ const CalendarSection = () => {
                 </p>
 
                 {/* Slots */}
-                {day.available_slots.length > 0 ? (
+                {day.available_slots && day.available_slots.length > 0 ? (
                   <div className="flex flex-wrap gap-2 mt-3">
                     {day.available_slots.map((slot, i) => (
                       <span
