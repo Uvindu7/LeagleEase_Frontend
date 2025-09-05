@@ -92,6 +92,11 @@ const Login = () => {
               <Link to="/register" className="font-semibold underline text-white">
                 Register
               </Link>
+              </p>
+              <p>
+              <Link to="/resetpassword" className="font-semibold underline text-white">
+                Reset Password
+              </Link>
             </p>
           </div>
         </form>

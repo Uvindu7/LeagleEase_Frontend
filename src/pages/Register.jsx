@@ -45,7 +45,7 @@ const Register = () => {
     }
 
     try {
-      const res = await fetch("http://localhost/backend/register.php", {
+      const res = await fetch("http://localhost/backend/api/register.php", {
         method: "POST",
         body: formData,
       });
