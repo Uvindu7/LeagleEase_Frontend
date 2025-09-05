@@ -30,7 +30,7 @@ const StartPage = () => {
           </button>
           <button
             onClick={goToRegister}
-            className="w-full py-3 bg-[#a68e56] text-white rounded-lg hover:bg-green-700 transition"
+            className="w-full py-3 bg-[#a68e56] text-white rounded-lg hover:bg-blue-700 transition"
           >
             Sign Up
           </button>

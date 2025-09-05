@@ -1,38 +1,70 @@
 import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
+import { loadStripe } from "@stripe/stripe-js";
 import backgroundImg from '../assets/browse lawyer bg.jpg';
-import gaminiImg from '../assets/lawyers/Gamini Jayasinghe.jpg';
+
+const stripePromise = loadStripe("pk_test_51RwGmxC0IqUbyDKdGsDp40y18GoXlmNkNtt8vNQROmwMLADljtK6mwHvrJROPxPR79rdFmilC3ZH21uPlYz5chEq00uI6bFx18");
 
 const AppointmentBooking = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Only use the lawyer passed from Browse page
+  const lawyer = location.state?.lawyer;
+
+  // Redirect back if no lawyer is selected
+  if (!lawyer) {
+    navigate("/browse"); // or wherever you want
+    return null;
+  }
+
   const [selectedSlot, setSelectedSlot] = useState('');
   const [description, setDescription] = useState('');
-
-  const lawyer = {
-    name: "Gamini Jayasinghe",
-    specialization: "Corporate Law",
-    image: gaminiImg,
-  };
 
   const timeSlots = [
     "9:00 AM", "10:00 AM", "11:00 AM", "1:00 PM",
     "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM",
   ];
 
-  const handleBooking = () => {
+  const handleBooking = async () => {
     if (!selectedSlot) {
       alert("Please select a time slot");
       return;
     }
-    alert(`Booking confirmed for ${selectedSlot}\nDescription: ${description}`);
-    // Here, you could send booking info to backend
+
+    try {
+      const response = await fetch("http://localhost/backend/payment.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          slot: selectedSlot,
+          description,
+          lawyer: lawyer.name,
+          price: 5000
+        }),
+      });
+
+      const session = await response.json();
+      if (session.error) {
+        alert("Error: " + session.error);
+        return;
+      }
+
+      const stripe = await stripePromise;
+      await stripe.redirectToCheckout({ sessionId: session.id });
+
+    } catch (error) {
+      console.error(error);
+      alert("Payment failed. Try again.");
+    }
   };
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
 
-      {/* Background image wrapper */}
       <div
         className="flex flex-1 items-center justify-center bg-gray-100 text-black p-6 mt-14"
         style={{
@@ -42,22 +74,16 @@ const AppointmentBooking = () => {
         }}
       >
         <div className="w-full max-w-2xl bg-gradient-to-b from-[#f1e4c3df] via-[#c5a473d3] to-[#6e4d1ee5] backdrop-blur-2xl rounded-lg shadow-lg p-6">
-          
+
           {/* Lawyer Info */}
           <div className="bg-[#f8e7bde0] backdrop-blur-2xl shadow-md rounded-lg p-4 flex items-center gap-6 mb-6">
-            <img
-              src={lawyer.image}
-              alt={lawyer.name}
-              className="w-40 h-28 object-cover rounded-md"
-            />
-            <div>
               <h2 className="text-2xl font-bold">{lawyer.name}</h2>
               <p className="text-gray-600">{lawyer.specialization}</p>
-            </div>
-          </div>
+           </div>
+        
 
           {/* Calendar View */}
-          <div className="bg-[#f8e7bde0] backdrop-blur-2xl hishadow-md rounded-lg p-6 mb-6">
+          <div className="bg-[#f8e7bde0] backdrop-blur-2xl shadow-md rounded-lg p-6 mb-6">
             <h3 className="text-xl font-semibold mb-4">Select a Time Slot</h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {timeSlots.map((slot, index) => (
@@ -68,7 +94,6 @@ const AppointmentBooking = () => {
                     selectedSlot === slot
                       ? 'bg-blue-600 text-white'
                       : 'bg-gray-200 hover:bg-blue-100'
-                    
                   }`}
                 >
                   {slot}
@@ -89,9 +114,9 @@ const AppointmentBooking = () => {
             />
             <button
               onClick={handleBooking}
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded text-lg font-semibold"
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded text-lg font-semibold w-full"
             >
-              Confirm Booking
+              Confirm & Pay
             </button>
           </div>
 
@@ -104,3 +129,5 @@ const AppointmentBooking = () => {
 };
 
 export default AppointmentBooking;
+
+

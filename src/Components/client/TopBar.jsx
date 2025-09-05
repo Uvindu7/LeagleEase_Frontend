@@ -1,14 +1,22 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu } from 'lucide-react';
-import profilePhoto from '../../assets/profile.jpg';
 
 const TopBar = ({ onMenuClick }) => {
   const navigate = useNavigate();
 
+  // Navigate only to home
+  const goHome = () => {
+    navigate('/home'); // Home page
+  };
+
+  // Logout logic + redirect
   const handleLogout = () => {
-    // Optional: You can add session clearing logic here if needed
-    navigate('/'); // Redirect to the homepage
+    // Example: Clear session/localStorage/token here
+    localStorage.removeItem("authToken"); 
+    sessionStorage.clear();
+
+    navigate('/login'); // Redirect to login page after logout
   };
 
   return (
@@ -24,21 +32,22 @@ const TopBar = ({ onMenuClick }) => {
         </button>
 
         {/* Logo */}
-        <div className="text-white text-3xl font-extrabold tracking-wider cursor-pointer hover:text-gray-300 transition duration-300">
+        <div 
+          className="text-white text-3xl font-extrabold tracking-wider cursor-pointer hover:text-gray-300 transition duration-300"
+          onClick={goHome} // Logo also takes you home
+        >
           LegalEase
         </div>
 
         {/* Profile & Logout */}
         <div className="flex items-center space-x-6">
-          {/* Profile Photo */}
-          <div className="flex items-center space-x-3 cursor-pointer hover:opacity-90 transition duration-300">
-            <img
-              src={profilePhoto}
-              alt="User Profile"
-              className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-md hover:scale-105 transition-transform duration-300"
-            />
-            <span className="hidden sm:block text-white text-lg font-semibold">Profile</span>
-          </div>
+          {/* Home Button */}
+          <button
+            onClick={goHome}
+            className="bg-white text-[#3e352a] px-5 py-2 rounded-full hover:bg-gray-200 transition duration-300 font-medium shadow hover:scale-105"
+          >
+            Home
+          </button>
 
           {/* Logout Button */}
           <button
@@ -54,3 +63,4 @@ const TopBar = ({ onMenuClick }) => {
 };
 
 export default TopBar;
+

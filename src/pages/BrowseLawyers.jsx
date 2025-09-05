@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import backgroundImg from '../assets/browse lawyer bg.jpg';
+import { Link } from "react-router-dom";
 
 import tharinduImg from '../assets/lawyers/Tharindu Perera.jpg';
 import dilaniImg from '../assets/lawyers/Dilani Fernando.jpg';
@@ -24,8 +25,8 @@ const BrowseLawyers = () => {
 
   // useEffect to get fetching data from backend
   useEffect(() => {
-    /*
-    //Sample lawyer dara cards 
+
+    //Sample lawyer dara cards.. 
     const sampleData = [
       {
         id: 1,
@@ -35,6 +36,8 @@ const BrowseLawyers = () => {
         fee: 9000,
         bio: "Young and energetic defense lawyer with a fresh perspective.",
         image_url: tharinduImg,
+        verified: true,
+        yearsExperience: 3,
       },
       {
         id: 2,
@@ -44,6 +47,8 @@ const BrowseLawyers = () => {
         fee: 10000,
         bio: "Specialist in divorce, custody, and adoption cases.",
         image_url: dilaniImg,
+        verified: true,
+        yearsExperience: 6,
       },
       {
         id: 3,
@@ -53,6 +58,8 @@ const BrowseLawyers = () => {
         fee: 25000,
         bio: "Handles corporate mergers, acquisitions, and contracts for international firms.",
         image_url: gaminiImg,
+        verified: false,
+        yearsExperience: 15,
       },
       {
         id: 4,
@@ -62,6 +69,8 @@ const BrowseLawyers = () => {
         fee: 12000,
         bio: "Passionate about helping families through legal processes smoothly.",
         image_url: nadeeshaImg,
+        verified: true,
+        yearsExperience: 4,
       },
       {
         id: 5,
@@ -73,35 +82,28 @@ const BrowseLawyers = () => {
         image_url: ruwanImg,
       }
     ];
+
+    /*
+    === connect database to get lawyer details ===
+
+    setLawyers(sampleData);
+    setLoading(false);
+
+     fetch(" ") //backend php file location
+      .then((res) => res.json())
+      .then((data) => {
+        setLawyers(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching lawyers:", error);
+        setLoading(false);
+      });
     */
 
-    //get lawyer details from backend
-    const fetchLawyers = async () => {
-      setLoading(true);
-
-      // Construct query string
-      const queryParams = new URLSearchParams({
-        specialization: specializationFilter,
-        minRating,
-        minFee,
-        maxFee,
-      });
-
-      try {
-        const response = await fetch(`http://localhost/LeagleEase_Backend/get_lawyers.php?${queryParams.toString()}`); //backend php file location - update URL!
-        if (!response.ok) throw new Error('Network response was not ok');
-        const data = await response.json();
-        setLawyers(data);
-      } catch (error) {
-        console.error("Error fetching lawyers:", error);
-        setLawyers([]); // Clear lawyers on error
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchLawyers();
-  }, [specializationFilter, minRating, minFee, maxFee]);
+  setLawyers(sampleData);
+  setLoading(false);
+  }, []);
 
   // Apply filtering options on lawyers fetched from backend (optional if backend filters already applied)
   const filteredLawyers = lawyers.filter((lawyer) => {
@@ -124,12 +126,8 @@ const BrowseLawyers = () => {
       >
 
         {/* Sidebar / Filters */}
-
-        <div className="w-1/4 h-[calc(100vh-80px)] sticky top-20 bg-[#f8e7bdf3]/50 backdrop-blur-md bg-clip-padding p-6 text-black overflow-y-auto z-40">
-          <h2 className="text-2xl font-semibold mb-4 border-b-2 border-b-black">Filters</h2>
-
-          {/* Specialization Filter */}
-
+        <div className="w-1/4 h-[calc(100vh-64px)] sticky top-[64px] bg-gradient-to-b from-[#f1e4c3df] via-[#c5a473d3] to-[#6e4d1ee5] p-6 text-black overflow-y-auto">
+        <h2 className="text-2xl font-semibold mb-4 border-b-2 border-b-black">Filters</h2>
           <label className="block mb-1 font-medium">Specialization</label>
           <select
             className="w-full mb-4 p-2 border rounded bg-[#c5a473] text-black"
@@ -163,7 +161,7 @@ const BrowseLawyers = () => {
             <input
               type="number"
               placeholder="Min"
-              className="w-1/2 p-2 border rounded bg-[#c5a473] text-black focus:outline-none focus:ring-2 focus:ring-[#b89450]"
+              className="w-1/2 p-2 border rounded bg-[#c5a473] text-black"
               step="5000"
               min="0"
               max="40000"
@@ -173,7 +171,7 @@ const BrowseLawyers = () => {
             <input
               type="number"
               placeholder="Max"
-              className="w-1/2 p-2 border rounded bg-[#c5a473] text-black focus:outline-none focus:ring-2 focus:ring-[#b89450]"
+              className="w-1/2 p-2 border rounded bg-[#c5a473] text-black"
               step="5000"
               min="10000"
               max="50000"
@@ -216,12 +214,20 @@ const BrowseLawyers = () => {
 
                   {/* Action Buttons */}
                   <div className="flex justify-between mt-4">
-                    <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
+                    <Link
+                      to="/lawyerprofile"
+                      state={{ lawyer }} // pass lawyer details
+                      className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm text-center"
+                    >
                       View Profile
-                    </button>
-                    <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm">
+                    </Link>
+                    <Link
+                      to="/bookappointment"
+                      state={{ lawyer }}
+                      className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm text-center"
+                    >
                       Book Now
-                    </button>
+                    </Link>
                   </div>
                 </div>
               ))}
@@ -236,3 +242,4 @@ const BrowseLawyers = () => {
 };
 
 export default BrowseLawyers;
+

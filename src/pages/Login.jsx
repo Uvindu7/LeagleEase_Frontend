@@ -16,13 +16,12 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost/BackEnd/Login.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
+      const res = await fetch("http://localhost/backend/api/login.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(form),
+    });
 
       const data = await res.json();
 

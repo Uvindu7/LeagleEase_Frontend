@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-
 import AdminDashboard from "./pages/AdminDashboard";
 import LawyerDashboard from "./pages/LawyerDashboard";
 import ClientDashboard from "./pages/ClientDashboard";
@@ -18,42 +17,42 @@ function App() {
   return (
     <Router>
       <Routes>
-        // Default Route 
+        {/* Default Route */}
         <Route path="/login" element={<Login />} />
 
-        // Admin Dashboard 
+        {/* Admin Dashboard */}
         <Route path="/admin" element={<AdminDashboard />} />
 
-        // Lawyer Dashboard 
+        {/* Lawyer Dashboard */}
         <Route path="/lawyer" element={<LawyerDashboard />} />
 
-        // Client Dashboard 
+        {/* Client Dashboard */}
         <Route path="/client" element={<ClientDashboard />} />
 
-        //Login
+        {/* Home */}
         <Route path="/home" element={<Homepage />} />
 
-        //Register
+        {/* Register */}
         <Route path="/register" element={<Register />} />
 
-        //Browser lawyer
-        <Route path="browselawyers" element={<BrowseLawyers/>} />
+        {/* Browse Lawyers */}
+        <Route path="/browselawyers" element={<BrowseLawyers />} />
 
-        //AppointmentBooking
+        {/* Appointment Booking */}
         <Route path="/bookappointment" element={<AppointmentBooking />} />
 
-        //LawyerProfilePage
-        <Route path="/lawyerprofile" element={<LawyerProfilePage/>}/>
+        {/* Lawyer Profile */}
+        <Route path="/lawyerprofile" element={<LawyerProfilePage />} />
 
-        //PaymentPage
-        <Route path="/paymentpage" element={<PaymentPage/>}/>
+        {/* Payment Page */}
+        <Route path="/paymentpage" element={<PaymentPage />} />
 
-        //Start
-        <Route path="/" element={<Start/>}/>
-
+        {/* Start (Landing Page) */}
+        <Route path="/" element={<Start />} />
       </Routes>
     </Router>
   );
 }
 
 export default App;
+
