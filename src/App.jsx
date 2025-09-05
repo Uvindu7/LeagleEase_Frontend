@@ -12,6 +12,9 @@ import AppointmentBooking from "./pages/AppointmentBooking";
 import LawyerProfilePage from "./pages/LawyerProfile";
 import PaymentPage from "./pages/PaymentPage";
 import Start from "./pages/Start";
+import ResetPassword from "./pages/ResetPassword";
+import NewPassword from "./pages/NewPassword";
+
 
 function App() {
   return (
@@ -49,6 +52,16 @@ function App() {
 
         {/* Start (Landing Page) */}
         <Route path="/" element={<Start />} />
+
+        {/* Password Reset Page*/}
+        <Route path="/resetpassword" element={<ResetPassword />} />
+
+        {/* New Password Page*/}
+        <Route path="/newpassword" element={<NewPassword />} />
+
+        
+
+
       </Routes>
     </Router>
   );

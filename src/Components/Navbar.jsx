@@ -75,27 +75,6 @@ const Navbar = () => {
               </div>
             ))}
 
-            <button
-              onClick={() => {
-                navigate('/login');
-                setMenuOpen(false);
-              }}
-              className="w-3/4 mx-auto bg-[#f3d999] text-[#4b4030] font-semibold px-5 py-2 rounded-full shadow-lg hover:scale-105 transform transition duration-300 focus:outline-none focus:ring-2 focus:ring-[#f3d999]"
-            >
-              Login
-            </button>
-
-            <button
-              onClick={() => {
-                navigate('/register');
-                setMenuOpen(false);
-              }}
-              className="w-3/4 mx-auto flex items-center justify-center bg-gradient-to-r from-[#f3d999] via-[#e6ca73] to-[#d1b852] text-[#4b4030] font-semibold px-5 py-2 rounded-full shadow-lg hover:scale-110 transform transition duration-300 space-x-2 focus:outline-none focus:ring-2 focus:ring-[#f3d999]"
-            >
-              <UserPlus className="w-5 h-5" />
-              <span>Sign Up</span>
-            </button>
-
             {/* Logout Button for Mobile */}
             <button
               onClick={() => {
