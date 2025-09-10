@@ -126,7 +126,7 @@ const BrowseLawyers = () => {
       >
 
         {/* Sidebar / Filters */}
-        <div className="w-1/4 h-[calc(100vh-64px)] sticky top-[64px] bg-gradient-to-b from-[#f1e4c3df] via-[#c5a473d3] to-[#6e4d1ee5] p-6 text-black overflow-y-auto">
+        <div className="w-1/4 h-[calc(100vh-64px)] sticky top-[64px] bg-gradient-to-b from-[#f1e4c3df] via-[#c5a47396] to-[#6e4d1e1c] p-6 text-black overflow-y-auto">
         <h2 className="text-2xl font-semibold mb-4 border-b-2 border-b-black">Filters</h2>
           <label className="block mb-1 font-medium">Specialization</label>
           <select
@@ -183,7 +183,8 @@ const BrowseLawyers = () => {
 
         {/* Main Content */}
         <div className="w-3/4 p-6 text-black pt-20">
-          <h1 className="text-3xl font-bold mb-6">Browse Lawyers</h1>
+          <h1 className="text-3xl font-bold mb-6 text-white
+        ">Browse Lawyers</h1>
 
           {/* Fee Range Filter */}
           {loading ? (
@@ -217,14 +218,14 @@ const BrowseLawyers = () => {
                     <Link
                       to="/lawyerprofile"
                       state={{ lawyer }} // pass lawyer details
-                      className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm text-center"
+                      className="bg-[#a68e56] text-white px-4 py-2 rounded hover:bg-[#e0d4aa] text-sm text-center"
                     >
                       View Profile
                     </Link>
                     <Link
                       to="/bookappointment"
                       state={{ lawyer }}
-                      className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm text-center"
+                      className="bg-[#897547] text-white px-4 py-2 rounded hover:bg-[#e0d4aa] text-sm text-center"
                     >
                       Book Now
                     </Link>
