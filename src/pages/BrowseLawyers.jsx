@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+
+// Importe components and assets
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import backgroundImg from '../assets/browse lawyer bg.jpg';
@@ -11,16 +13,20 @@ import nadeeshaImg from '../assets/lawyers/Nadeesha Silva.jpg';
 import ruwanImg from '../assets/lawyers/Ruwan Gunasekara.jpg';
 
 const BrowseLawyers = () => {
+  // State for lawyer data
   const [lawyers, setLawyers] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // States for filters
   const [specializationFilter, setSpecializationFilter] = useState('');
   const [minRating, setMinRating] = useState('');
   const [minFee, setMinFee] = useState('');
   const [maxFee, setMaxFee] = useState('');
 
+  // useEffect to get fetching data from backend
   useEffect(() => {
-    // Sample lawyer data
+
+    //Sample lawyer dara cards.. 
     const sampleData = [
       {
         id: 1,
@@ -74,15 +80,32 @@ const BrowseLawyers = () => {
         fee: 15000,
         bio: "Experienced criminal defense lawyer with over 10 years in high-profile cases.",
         image_url: ruwanImg,
-        verified: true,
-        yearsExperience: 11,
       }
     ];
 
+    /*
+    === connect database to get lawyer details ===
+
     setLawyers(sampleData);
     setLoading(false);
+
+     fetch(" ") //backend php file location
+      .then((res) => res.json())
+      .then((data) => {
+        setLawyers(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching lawyers:", error);
+        setLoading(false);
+      });
+    */
+
+  setLawyers(sampleData);
+  setLoading(false);
   }, []);
 
+  // Apply filtering options on lawyers fetched from backend (optional if backend filters already applied)
   const filteredLawyers = lawyers.filter((lawyer) => {
     const matchSpecialization = !specializationFilter || lawyer.specialization === specializationFilter;
     const matchRating = !minRating || parseFloat(lawyer.rating) >= parseFloat(minRating);
@@ -96,14 +119,15 @@ const BrowseLawyers = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
 
+      {/* Main Container with background */}
       <div
         className="flex flex-1"
         style={{ backgroundImage: `url(${backgroundImg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
       >
 
         {/* Sidebar / Filters */}
-        <div className="w-1/4 h-[calc(100vh-64px)] sticky top-[64px] bg-gradient-to-b from-[#f1e4c3df] via-[#c5a473d3] to-[#6e4d1ee5] p-6 text-black overflow-y-auto">
-          <h2 className="text-2xl font-semibold mb-4 border-b-2 border-b-black">Filters</h2>
+        <div className="w-1/4 h-[calc(100vh-64px)] sticky top-[64px] bg-gradient-to-b from-[#f1e4c3df] via-[#c5a47396] to-[#6e4d1e1c] p-6 text-black overflow-y-auto">
+        <h2 className="text-2xl font-semibold mb-4 border-b-2 border-b-black">Filters</h2>
           <label className="block mb-1 font-medium">Specialization</label>
           <select
             className="w-full mb-4 p-2 border rounded bg-[#c5a473] text-black"
@@ -116,6 +140,7 @@ const BrowseLawyers = () => {
             <option value="Corporate Law">Corporate Law</option>
           </select>
 
+          {/* Rating Filter */}
           <label className="block mb-1 font-medium">Rating</label>
           <select
             className="w-full mb-4 p-2 border rounded bg-[#c5a473] text-black" 
@@ -130,6 +155,7 @@ const BrowseLawyers = () => {
             <option value="5">★★★★★</option>
           </select>
 
+          {/* Fee Range Filter */}
           <label className="block mb-1 font-medium">Fee Range (LKR)</label>
           <div className="flex gap-2 mb-4">
             <input
@@ -156,42 +182,50 @@ const BrowseLawyers = () => {
         </div>
 
         {/* Main Content */}
-        <div className="w-3/4 p-6 text-black">
-          <h1 className="text-3xl font-bold mb-6">Browse Lawyers</h1>
+        <div className="w-3/4 p-6 text-black pt-20">
+          <h1 className="text-3xl font-bold mb-6 text-white
+        ">Browse Lawyers</h1>
 
+          {/* Fee Range Filter */}
           {loading ? (
             <div className="text-lg">Loading lawyers...</div>
           ) : filteredLawyers.length === 0 ? (
             <div className="text-gray-700">No lawyers match your criteria.</div>
           ) : (
+            // Lawyer Cards Grid
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredLawyers.map((lawyer) => (
                 <div
                   key={lawyer.id}
                   className="bg-[#f8e7bdf3] rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow"
                 >
+                  {/* Lawyer Image */}
                   <img
                     src={lawyer.image_url}
                     alt={lawyer.name}
-                    className="w-full h-40 object-cover rounded-md mb-4"
+
+                    className="w-full h-40 object-cover rounded-md mb-4 transform group-hover:scale-105 transition-transform duration-500"
                   />
+                  {/* Lawyer Info */}
                   <h3 className="text-xl font-semibold">{lawyer.name}</h3>
                   <p className="text-sm text-gray-600">{lawyer.specialization}</p>
                   <p className="text-sm mt-1">Rating: ⭐ {lawyer.rating}</p>
                   <p className="text-sm">Fee: LKR {lawyer.fee}</p>
                   <p className="text-sm text-gray-700 mt-2">{lawyer.bio}</p>
+
+                  {/* Action Buttons */}
                   <div className="flex justify-between mt-4">
                     <Link
                       to="/lawyerprofile"
                       state={{ lawyer }} // pass lawyer details
-                      className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm text-center"
+                      className="bg-[#a68e56] text-white px-4 py-2 rounded hover:bg-[#e0d4aa] text-sm text-center"
                     >
                       View Profile
                     </Link>
                     <Link
                       to="/bookappointment"
                       state={{ lawyer }}
-                      className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm text-center"
+                      className="bg-[#897547] text-white px-4 py-2 rounded hover:bg-[#e0d4aa] text-sm text-center"
                     >
                       Book Now
                     </Link>

@@ -140,14 +140,14 @@ const Register = () => {
 
           <button
             type="submit"
-            className="w-full py-3 bg-white text-gray-800 font-bold rounded-md hover:bg-yellow-200 transition"
+            className="w-full py-3 bg-[#a68e56] text-gray-800 font-bold rounded-md hover:bg-[#e0d4aa] transition"
           >
             Register
           </button>
 
           <p className="mt-6 text-center">
             Already have an account?{' '}
-            <Link to="/login" className="font-semibold text-black underline">
+            <Link to="/login" className="font-semibold text-black underline hover:text-[#a68e56] transition">
               Login
             </Link>
           </p>
