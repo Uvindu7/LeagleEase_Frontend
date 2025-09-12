@@ -41,11 +41,9 @@ const Login = () => {
       className="w-full h-screen flex justify-center items-center bg-cover bg-center bg-no-repeat relative"
       style={{ backgroundImage: `url(${backgroundImg})` }}
     >
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black opacity-60 z-0"></div>
-
+      
       {/* Login Form */}
-      <div className="relative z-10 w-[100%] max-w-[400px] bg-white/10 backdrop-blur-md text-white rounded-xl shadow-lg p-8">
+      <div className="relative z-10 w-[100%] max-w-[400px] bg-white backdrop-blur-md text-black rounded-xl shadow-lg p-8">
         <form onSubmit={handleSubmit}>
           <h1 className="mb-8 text-3xl font-bold text-center">Login</h1>
 
@@ -57,7 +55,7 @@ const Login = () => {
               onChange={handleChange}
               placeholder="Username or Email"
               required
-              className="w-full h-full pl-3 pr-10 text-base text-white bg-transparent border border-white rounded-md outline-none placeholder-white"
+              className="w-full h-full pl-3 pr-10 text-base text-black bg-transparent border border-black rounded-md outline-none placeholder-black"
             />
             <FaUser className="absolute text-white transform -translate-y-1/2 right-3 top-1/2" />
           </div>
@@ -70,7 +68,7 @@ const Login = () => {
               onChange={handleChange}
               placeholder="Password"
               required
-              className="w-full h-full pl-3 pr-10 text-base text-white bg-transparent border border-white rounded-md outline-none placeholder-white"
+              className="w-full h-full pl-3 pr-10 text-base text-black bg-transparent border border-black rounded-md outline-none placeholder-black"
             />
             <FaLock className="absolute text-white transform -translate-y-1/2 right-3 top-1/2" />
           </div>
@@ -81,7 +79,7 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full h-10 mt-2 rounded-full bg-white text-black font-bold text-base hover:bg-[#e0d4aa] transition"
+            className="w-full h-10 mt-2 rounded-full bg-[#a68e56] text-black font-bold text-base hover:bg-[#e0d4aa] transition"
           >
             Login
           </button>
@@ -89,12 +87,12 @@ const Login = () => {
           <div className="mt-6 text-sm text-center">
             <p>
               Don't have an account?{" "}
-              <Link to="/register" className="font-semibold underline text-white">
+              <Link to="/register" className="font-semibold underline text-black hover:text-[#a68e56] transition">
                 Register
               </Link>
               </p>
               <p>
-              <Link to="/resetpassword" className="font-semibold underline text-white">
+              <Link to="/resetpassword" className="font-semibold underline text-black hover:text-[#a68e56] transition">
                 Reset Password
               </Link>
             </p>

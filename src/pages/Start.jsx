@@ -24,13 +24,13 @@ const StartPage = () => {
         <div className="flex flex-col gap-4">
           <button
             onClick={goToLogin}
-            className="w-full py-3 bg-[#a68e56] text-white rounded-lg hover:bg-blue-700 transition"
+            className="w-full py-3 bg-[#a68e56] text-black rounded-lg hover:bg-[#e0d4aa] transition"
           >
             Sign In
           </button>
           <button
             onClick={goToRegister}
-            className="w-full py-3 bg-[#a68e56] text-white rounded-lg hover:bg-blue-700 transition"
+            className="w-full py-3 bg-[#a68e56] text-black rounded-lg hover:bg-[#e0d4aa] transition"
           >
             Sign Up
           </button>

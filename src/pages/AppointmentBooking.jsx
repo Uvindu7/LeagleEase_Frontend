@@ -92,8 +92,8 @@ const AppointmentBooking = () => {
                   onClick={() => setSelectedSlot(slot)}
                   className={`px-4 py-2 rounded border transition ${
                     selectedSlot === slot
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-200 hover:bg-blue-100'
+                      ? 'bg-[#a68e56]  text-white'
+                      : 'bg-gray-200 hover:bg-[#e0d4aa]'
                   }`}
                 >
                   {slot}
@@ -107,14 +107,14 @@ const AppointmentBooking = () => {
             <h3 className="text-xl font-semibold mb-4">Booking Details</h3>
             <textarea
               placeholder="Description (optional)"
-              className="w-full p-3 border rounded mb-4 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full p-3 border rounded mb-4 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#b1a886]"
               rows={4}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
             <button
               onClick={handleBooking}
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded text-lg font-semibold w-full"
+              className="bg-[#a68e56] hover:bg-[#b1a886] text-white px-6 py-3 rounded text-lg font-semibold w-full"
             >
               Confirm & Pay
             </button>

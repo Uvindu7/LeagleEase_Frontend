@@ -96,13 +96,13 @@ export default function ResetPassword() {
           required 
           value={email} 
           onChange={(e) => setEmail(e.target.value)} 
-          className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" 
+          className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#e0d4aa] focus:outline-none" 
           placeholder="your@email.com" 
           /> 
           </div> 
           <button 
           type="submit" 
-          className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition" 
+          className="w-full py-2 px-4 bg-[#a68e56] text-black font-semibold rounded-lg hover:bg-[#e0d4aa] transition" 
           > 
           Send OTP 
           </button> 
