@@ -1,53 +1,89 @@
-import React, { useState } from 'react';
-import { CalendarDaysIcon } from '@heroicons/react/24/outline';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+// components/CalendarSection.jsx
+import React, { useEffect, useState } from "react";
+import { CalendarDaysIcon, ClockIcon } from "@heroicons/react/24/outline";
 
 const CalendarSection = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [slots, setSlots] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Example available times for the selected date
-  const availableTimes = [
-    "09:00 AM",
-    "10:30 AM",
-    "01:00 PM",
-    "03:00 PM",
-    "04:30 PM",
-  ];
+  useEffect(() => {
+    fetch("http://localhost/backend/api/get_available_slot.php")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("API response:", data);
+        setSlots(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching slots:", err);
+        setLoading(false);
+      });
+  }, []);
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-lg h-full transition-transform duration-300 hover:shadow-2xl flex flex-col">
-      {/* Section Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <CalendarDaysIcon className="w-8 h-8 text-[#3e352a]" />
-        <h2 className="text-2xl font-semibold text-[#3e352a]">Upcoming Appointments</h2>
+    <div className="bg-white p-8 rounded-3xl shadow-lg h-full border border-gray-100">
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-8">
+        <CalendarDaysIcon className="w-9 h-9 text-blue-600" />
+        <h2 className="text-2xl font-bold text-gray-800">
+          Upcoming Availability
+        </h2>
       </div>
 
-      {/* React Calendar */}
-      <Calendar
-        onChange={setSelectedDate}
-        value={selectedDate}
-        className="react-calendar rounded-xl shadow-md"
-      />
+      {/* Loading */}
+      {loading ? (
+        <div className="flex justify-center items-center h-40">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          {slots.map((day, index) => (
+            <div key={index} className="flex items-start gap-4">
+              {/* Timeline indicator */}
+              <div className="flex flex-col items-center">
+                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                {index !== slots.length - 1 && (
+                  <div className="w-px flex-1 bg-gray-300"></div>
+                )}
+              </div>
 
-      {/* Available Times */}
-      <div className="mt-6">
-        <h3 className="text-lg font-semibold mb-2 text-[#3e352a]">
-          Available Times on {selectedDate.toDateString()}
-        </h3>
-        <ul className="grid grid-cols-3 gap-3">
-          {availableTimes.map((time) => (
-            <li
-              key={time}
-              className="bg-[#3e352a] text-white rounded-md px-3 py-1 text-center cursor-pointer hover:bg-[#5a4e41] transition"
-            >
-              {time}
-            </li>
+              {/* Card */}
+              <div className="flex-1 bg-gray-50 rounded-xl p-5 shadow-sm hover:shadow-md transition">
+                {/* Date */}
+                <p className="font-semibold text-gray-900 text-lg">
+                  {new Date(day.date).toLocaleDateString("en-US", {
+                    weekday: "long",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </p>
+
+                {/* Slots */}
+                {day.available_slots.length > 0 ? (
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {day.available_slots.map((slot, i) => (
+                      <span
+                        key={i}
+                        className="flex items-center gap-1 px-4 py-1.5 bg-blue-100 text-blue-700 rounded-full text-sm font-medium hover:bg-blue-200 transition cursor-pointer"
+                      >
+                        <ClockIcon className="w-4 h-4" />
+                        {slot}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-500 mt-2 italic">
+                    No slots available
+                  </p>
+                )}
+              </div>
+            </div>
           ))}
-        </ul>
-      </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default CalendarSection;
+

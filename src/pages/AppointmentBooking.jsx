@@ -1,22 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { loadStripe } from "@stripe/stripe-js";
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
-import { loadStripe } from "@stripe/stripe-js";
 import backgroundImg from '../assets/browse lawyer bg.jpg';
 
-const stripePromise = loadStripe("pk_test_51RwGmxC0IqUbyDKdGsDp40y18GoXlmNkNtt8vNQROmwMLADljtK6mwHvrJROPxPR79rdFmilC3ZH21uPlYz5chEq00uI6bFx18");
+const stripePromise = loadStripe("pk_test_51RwGmxC0IqUbyDKdGsDp40y18GoXlmNkNtt8vNQROmwMLADljtK6mwHvrJROPxPR79rdFmilC3ZH21uPlYz5chEq00uI6bFx18"); // Replace with your publishable key
 
-const AppointmentBooking = () => {
+export default function AppointmentBooking() {
   const location = useLocation();
   const navigate = useNavigate();
-
-  // Only use the lawyer passed from Browse page
   const lawyer = location.state?.lawyer;
 
-  // Redirect back if no lawyer is selected
   if (!lawyer) {
-    navigate("/browse"); // or wherever you want
+    navigate("/browse");
     return null;
   }
 
@@ -28,6 +25,14 @@ const AppointmentBooking = () => {
     "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM",
   ];
 
+  // Show success/fail alert based on URL query
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const payment = params.get("payment");
+    if (payment === "success") alert("✅ Payment successful! Your appointment is booked.");
+    if (payment === "failed") alert("❌ Payment failed. Please try again.");
+  }, []);
+
   const handleBooking = async () => {
     if (!selectedSlot) {
       alert("Please select a time slot");
@@ -35,66 +40,61 @@ const AppointmentBooking = () => {
     }
 
     try {
-      const response = await fetch("http://localhost/backend/payment.php", {
+      const res = await fetch("http://localhost/backend/payment.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           slot: selectedSlot,
           description,
           lawyer: lawyer.name,
-          price: 5000
+          price: 5000, // Amount in cents
         }),
       });
 
-      const session = await response.json();
+      const session = await res.json();
       if (session.error) {
         alert("Error: " + session.error);
         return;
       }
 
       const stripe = await stripePromise;
+      if (!session.id) {
+        alert("Payment failed. Please try again.");
+        return;
+      }
+
       await stripe.redirectToCheckout({ sessionId: session.id });
 
     } catch (error) {
       console.error(error);
-      alert("Payment failed. Try again.");
+      alert("Payment failed. Please try again.");
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-
       <div
         className="flex flex-1 items-center justify-center bg-gray-100 text-black p-6 mt-14"
-        style={{
-          backgroundImage: `url(${backgroundImg})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }}
+        style={{ backgroundImage: `url(${backgroundImg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
       >
         <div className="w-full max-w-2xl bg-gradient-to-b from-[#f1e4c3df] via-[#c5a473d3] to-[#6e4d1ee5] backdrop-blur-2xl rounded-lg shadow-lg p-6">
 
           {/* Lawyer Info */}
-          <div className="bg-[#f8e7bde0] backdrop-blur-2xl shadow-md rounded-lg p-4 flex items-center gap-6 mb-6">
-              <h2 className="text-2xl font-bold">{lawyer.name}</h2>
-              <p className="text-gray-600">{lawyer.specialization}</p>
-           </div>
-        
+          <div className="bg-[#f8e7bde0] shadow-md rounded-lg p-4 flex items-center gap-6 mb-6">
+            <h2 className="text-2xl font-bold">{lawyer.name}</h2>
+            <p className="text-gray-600">{lawyer.specialization}</p>
+          </div>
 
-          {/* Calendar View */}
-          <div className="bg-[#f8e7bde0] backdrop-blur-2xl shadow-md rounded-lg p-6 mb-6">
+          {/* Time Slots */}
+          <div className="bg-[#f8e7bde0] shadow-md rounded-lg p-6 mb-6">
             <h3 className="text-xl font-semibold mb-4">Select a Time Slot</h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {timeSlots.map((slot, index) => (
+              {timeSlots.map((slot, i) => (
                 <button
-                  key={index}
+                  key={i}
                   onClick={() => setSelectedSlot(slot)}
-                  className={`px-4 py-2 rounded border transition ${
-                    selectedSlot === slot
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-200 hover:bg-blue-100'
-                  }`}
+                  className={`px-4 py-2 rounded border transition ${selectedSlot === slot ? 'bg-blue-600 text-white' : 'bg-gray-200 hover:bg-blue-100'}`}
                 >
                   {slot}
                 </button>
@@ -103,7 +103,7 @@ const AppointmentBooking = () => {
           </div>
 
           {/* Booking Form */}
-          <div className="bg-[#f8e7bde0] backdrop-blur-2xl shadow-md rounded-lg p-6">
+          <div className="bg-[#f8e7bde0] shadow-md rounded-lg p-6">
             <h3 className="text-xl font-semibold mb-4">Booking Details</h3>
             <textarea
               placeholder="Description (optional)"
@@ -122,12 +122,8 @@ const AppointmentBooking = () => {
 
         </div>
       </div>
-
       <Footer />
     </div>
   );
-};
-
-export default AppointmentBooking;
-
+}
 
