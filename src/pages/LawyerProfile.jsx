@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { CheckBadgeIcon, CalendarDaysIcon } from "@heroicons/react/24/solid";
+import { CheckBadgeIcon, CalendarDaysIcon, StarIcon } from "@heroicons/react/24/solid";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import backgroundImg from "../assets/background.webp";
@@ -10,6 +10,7 @@ export default function LawyerProfilePage() {
   const { lawyer } = location.state || {}; // get lawyer data from BrowseLawyers
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedSlot, setSelectedSlot] = useState("");
+  const [availability, setAvailability] = useState([]);
 
   if (!lawyer) {
     return (
@@ -23,11 +24,22 @@ export default function LawyerProfilePage() {
     );
   }
 
-  // Dummy availability (can later come from backend)
-  const availability = [
-    { date: "2025-07-21", slots: ["10:00", "14:00", "16:00"] },
-    { date: "2025-07-23", slots: ["09:00", "15:00"] },
-  ];
+  // Function to generate random slots
+  function generateRandomSlots() {
+    const dates = ["2025-09-14", "2025-09-15", "2025-09-16", "2025-09-17"];
+    const allPossibleSlots = ["17:00", "18:00", "19:00", "20:00", "21:00"];
+    const randomAvailability = dates.map((date) => {
+      // Random 2–4 slots per day
+      const shuffled = [...allPossibleSlots].sort(() => 0.5 - Math.random());
+      const slots = shuffled.slice(0, Math.floor(Math.random() * 3) + 2);
+      return { date, slots };
+    });
+    return randomAvailability;
+  }
+
+  useEffect(() => {
+    setAvailability(generateRandomSlots());
+  }, []);
 
   function handleSlot(date, slot) {
     if (selectedDate === date && selectedSlot === slot) {
@@ -38,6 +50,22 @@ export default function LawyerProfilePage() {
       setSelectedSlot(slot);
     }
   }
+
+  // Render stars for rating
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      stars.push(
+        <StarIcon
+          key={i}
+          className={`w-5 h-5 ${
+            i <= rating ? "text-yellow-500" : "text-gray-300"
+          }`}
+        />
+      );
+    }
+    return <div className="flex justify-center mt-2">{stars}</div>;
+  };
 
   return (
     <div
@@ -52,6 +80,7 @@ export default function LawyerProfilePage() {
       <Navbar />
       <main className="flex-1 flex items-center justify-center px-2 py-6 pt-24">
         <div className="w-full max-w-xl bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 flex flex-col gap-8 relative overflow-auto">
+          {/* Profile Header */}
           <div className="flex flex-col items-center">
             <img
               className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
@@ -76,13 +105,15 @@ export default function LawyerProfilePage() {
                   ? `${lawyer.yearsExperience} years of experience`
                   : "Experience info not available"}
               </div>
+              {/* Rating Stars */}
+              {renderStars(lawyer.rating)}
             </div>
           </div>
 
           {/* Availability */}
           <div>
             <div className="flex items-center mb-2 text-[#6e4e13]">
-              <CalendarDaysIcon className="w-5 h-5 text-gold-500 mr-2" />
+              <CalendarDaysIcon className="w-5 h-5 mr-2" />
               <span className="font-medium">Select a Time Slot:</span>
             </div>
             <div className="flex flex-col gap-2">
