@@ -6,11 +6,11 @@ import Footer from '../Components/Footer';
 import backgroundImg from '../assets/browse lawyer bg.jpg';
 import { Link } from "react-router-dom";
 
-import tharinduImg from '../assets/lawyers/Tharindu Perera.jpg';
-import dilaniImg from '../assets/lawyers/Dilani Fernando.jpg';
-import gaminiImg from '../assets/lawyers/Gamini Jayasinghe.jpg';
-import nadeeshaImg from '../assets/lawyers/Nadeesha Silva.jpg';
-import ruwanImg from '../assets/lawyers/Ruwan Gunasekara.jpg';
+// import tharinduImg from '../assets/lawyers/Tharindu Perera.jpg';
+// import dilaniImg from '../assets/lawyers/Dilani Fernando.jpg';
+// import gaminiImg from '../assets/lawyers/Gamini Jayasinghe.jpg';
+// import nadeeshaImg from '../assets/lawyers/Nadeesha Silva.jpg';
+// import ruwanImg from '../assets/lawyers/Ruwan Gunasekara.jpg';
 
 const BrowseLawyers = () => {
   // State for lawyer data
@@ -25,7 +25,7 @@ const BrowseLawyers = () => {
 
   // useEffect to get fetching data from backend
   useEffect(() => {
-
+    /*
     //Sample lawyer dara cards.. 
     const sampleData = [
       {
@@ -82,14 +82,15 @@ const BrowseLawyers = () => {
         image_url: ruwanImg,
       }
     ];
+    */
 
-    /*
-    === connect database to get lawyer details ===
+    
+    //=== connect database to get lawyer details ===
 
-    setLawyers(sampleData);
-    setLoading(false);
+    // setLawyers(sampleData);
+    // setLoading(false);
 
-     fetch(" ") //backend php file location
+     fetch("http://localhost/LeagleEase_Backend/get_lawyers.php") //backend php file location
       .then((res) => res.json())
       .then((data) => {
         setLawyers(data);
@@ -99,10 +100,10 @@ const BrowseLawyers = () => {
         console.error("Error fetching lawyers:", error);
         setLoading(false);
       });
-    */
+  
 
-  setLawyers(sampleData);
-  setLoading(false);
+  // setLawyers(sampleData);
+  // setLoading(false);
   }, []);
 
   // Apply filtering options on lawyers fetched from backend (optional if backend filters already applied)
@@ -123,6 +124,7 @@ const BrowseLawyers = () => {
       <div
         className="flex flex-1"
         style={{ backgroundImage: `url(${backgroundImg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+        
       >
 
         {/* Sidebar / Filters */}
