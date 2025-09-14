@@ -14,6 +14,7 @@ import PaymentPage from "./pages/PaymentPage";
 import Start from "./pages/Start";
 import ResetPassword from "./pages/ResetPassword";
 import NewPassword from "./pages/NewPassword";
+import AboutUs from "./pages/AboutUs";
 
 
 function App() {
@@ -58,6 +59,9 @@ function App() {
 
         {/* New Password Page*/}
         <Route path="/newpassword" element={<NewPassword />} />
+
+        {/* About Us Page*/}
+        <Route path="/aboutus" element={<AboutUs />} />
 
         
 
