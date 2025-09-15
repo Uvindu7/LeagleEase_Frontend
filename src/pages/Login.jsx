@@ -27,7 +27,12 @@ const Login = () => {
 
       if (data.success) {
         setMessage("Login successful!");
-        navigate("/home"); 
+        const role = data.data.role;
+        if(role === "client"){
+          navigate("/client");
+        }else{
+          navigate("/lawyer");
+        }
       } else {
         setMessage(data.message);
       }

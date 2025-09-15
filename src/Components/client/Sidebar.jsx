@@ -1,9 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Home, Search, Calendar, Bell, Settings, Menu, X } from 'lucide-react';
 import profilePhoto from '../../assets/profile.jpg';
 
 const Sidebar = ({ isOpen, onClose, onOpen }) => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch("http://localhost/backend/api/getuser.php", {
+          method: "GET",
+          credentials: "include", // important for session cookies
+        });
+        const data = await res.json();
+        if (data.success === "success") {
+          setUser(data.data);
+        } else {
+          console.error(data.message);
+        }
+      } catch (err) {
+        console.error("Error fetching user:", err);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   const menuItems = [
     { icon: Home, label: 'Dashboard', path: '/client' },
     { icon: Search, label: 'Browse Lawyers', path: '/browselawyers' },
@@ -25,7 +48,7 @@ const Sidebar = ({ isOpen, onClose, onOpen }) => {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-[#3e352a] text-white p-6 flex flex-col shadow-lg
+        className={`fixed top-0 left-0 h-[1200px] w-64 bg-[#3e352a] text-white p-6 flex flex-col shadow-lg
         transform transition-transform duration-300 ease-in-out z-40
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         lg:translate-x-0 lg:static lg:block lg:shadow-none`}
@@ -48,12 +71,16 @@ const Sidebar = ({ isOpen, onClose, onOpen }) => {
             alt="User Profile"
             className="w-24 h-24 rounded-full object-cover mb-3 border-4 border-white shadow-md ring-2 ring-[#4e4234]"
           />
-            <Link to="/settings"
-              className="text-xl font-semibold hover:text-gray-300 transition"
-              onClick={onClose}> 
-             Client Name
-            </Link>
-          <p className="text-sm text-gray-300">client@example.com</p>
+          <Link
+            to="/settings"
+            className="text-xl font-semibold hover:text-gray-300 transition"
+            onClick={onClose}
+          >
+            {user ? user.full_name : "Loading..."}
+          </Link>
+          <p className="text-sm text-gray-300">
+            {user ? user.email : ""}
+          </p>
         </div>
 
         {/* Navigation Menu */}
@@ -63,7 +90,7 @@ const Sidebar = ({ isOpen, onClose, onOpen }) => {
               <Link
                 to={path}
                 className="flex items-center space-x-3 hover:bg-[#4e4234] p-3 rounded-lg transition"
-                onClick={onClose} 
+                onClick={onClose}
               >
                 <Icon className="w-6 h-6" />
                 <span className="text-lg">{label}</span>
@@ -86,4 +113,3 @@ const Sidebar = ({ isOpen, onClose, onOpen }) => {
 };
 
 export default Sidebar;
-

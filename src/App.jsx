@@ -15,6 +15,9 @@ import Start from "./pages/Start";
 import ResetPassword from "./pages/ResetPassword";
 import NewPassword from "./pages/NewPassword";
 import AboutUs from "./pages/AboutUs";
+import Reviews from "./pages/Reviews";
+import Settings from "./pages/Settings";
+
 
 
 function App() {
@@ -63,8 +66,11 @@ function App() {
         {/* About Us Page*/}
         <Route path="/aboutus" element={<AboutUs />} />
 
+        {/* Review Page*/}
+        <Route path="/reviews" element={<Reviews />} />
         
-
+         {/* Setting Page*/}
+        <Route path="/settings" element={<Settings />} />
 
       </Routes>
     </Router>

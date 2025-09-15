@@ -13,7 +13,7 @@ const ClientDashboard = () => {
       <TopBar onMenuClick={() => setSidebarOpen(true)} />
 
       {/* Sidebar and main content */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-auto">
         <Sidebar
           isOpen={sidebarOpen}
           onClose={() => setSidebarOpen(false)}

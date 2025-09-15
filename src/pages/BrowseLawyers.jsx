@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
-// Importe components and assets
+// Import components and assets
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import backgroundImg from '../assets/browse lawyer bg.jpg';
 import { Link } from "react-router-dom";
 
-// import tharinduImg from '../assets/lawyers/Tharindu Perera.jpg';
-// import dilaniImg from '../assets/lawyers/Dilani Fernando.jpg';
-// import gaminiImg from '../assets/lawyers/Gamini Jayasinghe.jpg';
-// import nadeeshaImg from '../assets/lawyers/Nadeesha Silva.jpg';
-// import ruwanImg from '../assets/lawyers/Ruwan Gunasekara.jpg';
+import tharinduImg from '../assets/lawyers/Tharindu Perera.jpg';
+import dilaniImg from '../assets/lawyers/Dilani Fernando.jpg';
+import gaminiImg from '../assets/lawyers/Gamini Jayasinghe.jpg';
+import nadeeshaImg from '../assets/lawyers/Nadeesha Silva.jpg';
+import ruwanImg from '../assets/lawyers/Ruwan Gunasekara.jpg';
 
 const BrowseLawyers = () => {
   // State for lawyer data
@@ -25,8 +25,7 @@ const BrowseLawyers = () => {
 
   // useEffect to get fetching data from backend
   useEffect(() => {
-    /*
-    //Sample lawyer dara cards.. 
+    // Sample lawyer data
     const sampleData = [
       {
         id: 1,
@@ -82,31 +81,12 @@ const BrowseLawyers = () => {
         image_url: ruwanImg,
       }
     ];
-    */
 
-    
-    //=== connect database to get lawyer details ===
-
-    // setLawyers(sampleData);
-    // setLoading(false);
-
-     fetch("http://localhost/LeagleEase_Backend/get_lawyers.php") //backend php file location
-      .then((res) => res.json())
-      .then((data) => {
-        setLawyers(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching lawyers:", error);
-        setLoading(false);
-      });
-  
-
-  // setLawyers(sampleData);
-  // setLoading(false);
+    setLawyers(sampleData);
+    setLoading(false);
   }, []);
 
-  // Apply filtering options on lawyers fetched from backend (optional if backend filters already applied)
+  // Apply filtering options on lawyers
   const filteredLawyers = lawyers.filter((lawyer) => {
     const matchSpecialization = !specializationFilter || lawyer.specialization === specializationFilter;
     const matchRating = !minRating || parseFloat(lawyer.rating) >= parseFloat(minRating);
@@ -124,12 +104,10 @@ const BrowseLawyers = () => {
       <div
         className="flex flex-1"
         style={{ backgroundImage: `url(${backgroundImg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
-        
       >
-
         {/* Sidebar / Filters */}
         <div className="w-1/4 h-[calc(100vh-64px)] sticky top-[64px] bg-gradient-to-b from-[#f1e4c3df] via-[#c5a47396] to-[#6e4d1e1c] p-6 text-black overflow-y-auto">
-        <h2 className="text-2xl font-semibold mb-4 border-b-2 border-b-black">Filters</h2>
+          <h2 className="text-2xl font-semibold mb-4 border-b-2 border-b-black">Filters</h2>
           <label className="block mb-1 font-medium">Specialization</label>
           <select
             className="w-full mb-4 p-2 border rounded bg-[#c5a473] text-black"
@@ -185,10 +163,8 @@ const BrowseLawyers = () => {
 
         {/* Main Content */}
         <div className="w-3/4 p-6 text-black pt-20">
-          <h1 className="text-3xl font-bold mb-6 text-white
-        ">Browse Lawyers</h1>
+          <h1 className="text-3xl font-bold mb-6 text-white">Browse Lawyers</h1>
 
-          {/* Fee Range Filter */}
           {loading ? (
             <div className="text-lg">Loading lawyers...</div>
           ) : filteredLawyers.length === 0 ? (
@@ -205,7 +181,6 @@ const BrowseLawyers = () => {
                   <img
                     src={lawyer.image_url}
                     alt={lawyer.name}
-
                     className="w-full h-40 object-cover rounded-md mb-4 transform group-hover:scale-105 transition-transform duration-500"
                   />
                   {/* Lawyer Info */}
@@ -215,21 +190,30 @@ const BrowseLawyers = () => {
                   <p className="text-sm">Fee: LKR {lawyer.fee}</p>
                   <p className="text-sm text-gray-700 mt-2">{lawyer.bio}</p>
 
-                  {/* Action Buttons */}
-                  <div className="flex justify-between mt-4">
+                  {/* Action Buttons - Vertical */}
+                  <div className="flex flex-col gap-2 mt-4">
                     <Link
                       to="/lawyerprofile"
-                      state={{ lawyer }} // pass lawyer details
-                      className="bg-[#a68e56] text-white px-4 py-2 rounded hover:bg-[#e0d4aa] text-sm text-center"
+                      state={{ lawyer }}
+                      className="bg-[#a68e56] text-white px-4 py-2 rounded-lg text-center font-medium hover:bg-[#8b7842] transition-colors"
                     >
-                      View Profile
+                      👤 View Profile
                     </Link>
+                    
                     <Link
                       to="/bookappointment"
                       state={{ lawyer }}
-                      className="bg-[#897547] text-white px-4 py-2 rounded hover:bg-[#e0d4aa] text-sm text-center"
+                      className="bg-[#897547] text-white px-4 py-2 rounded-lg text-center font-medium hover:bg-[#6e5c35] transition-colors"
                     >
-                      Book Now
+                      📅 Book Now
+                    </Link>
+                    
+                    <Link
+                      to="/reviews"
+                      state={{ lawyer }}
+                      className="bg-[#6e4d1e] text-white px-4 py-2 rounded-lg text-center font-medium hover:bg-[#5a3e17] transition-colors"
+                    >
+                      ⭐ Review
                     </Link>
                   </div>
                 </div>
