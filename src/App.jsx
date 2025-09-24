@@ -22,6 +22,7 @@ import ClientAppointments from "./pages/ClientAppointments";
 import ClientNotifications from "./Components/client/Notifications";
 import LawyerNotifications from "./Components/lawyer/NotificatioSection";
 import LawyerAppointments from "./pages/LawyerAppointments";
+import MeetingDashboard from "./pages/MeetingDashboard";
 
 function App() {
   return (
@@ -85,6 +86,8 @@ function App() {
         <Route path="/lawyerNotifications" element={<LawyerNotifications />} />
 
         <Route path="/lawyerAppointments" element={<LawyerAppointments />} />
+
+        <Route path="/video" element={<MeetingDashboard />} />
       </Routes>
     </Router>
   );

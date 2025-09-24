@@ -65,7 +65,7 @@ export default function Settings() {
   };
 
   return (
-    <div className="p-6 max-w-lg mx-auto bg-white shadow rounded-lg">
+    <div className="p-6 max-w-lg mx-auto bg-white shadow rounded-lg mt-35">
       <h2 className="text-2xl font-bold mb-4">Update Profile</h2>
       {message && <p className="mb-4 text-green-600">{message}</p>}
       <form onSubmit={handleSubmit} className="space-y-4">

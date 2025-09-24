@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
-import backgroundImg from '../assets/browse lawyer bg.jpg';
 import { Link } from "react-router-dom";
 
 const BrowseLawyers = () => {
@@ -56,11 +55,8 @@ const BrowseLawyers = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div
-        className="flex flex-1"
-        style={{ backgroundImage: `url(${backgroundImg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
-      >
-        <aside className="w-1/4 h-[calc(100vh-64px)] sticky top-[64px] bg-gradient-to-b from-[#f1e4c3df] via-[#c5a47396] to-[#6e4d1e1c] p-6 text-black overflow-y-auto">
+      <div className="flex flex-1 bg-[#f5f2eb]"> {/* background removed */}
+        <aside className="w-1/4 h-[calc(100vh-64px)] sticky top-[64px] bg-white/80 backdrop-blur-sm p-6 text-black overflow-y-auto rounded-r-lg shadow-md">
           <h2 className="text-2xl font-semibold mb-4 border-b-2 border-b-black">Filters</h2>
 
           <label>Specialization</label>
@@ -94,12 +90,12 @@ const BrowseLawyers = () => {
         </aside>
 
         <main className="w-3/4 p-6 text-black pt-20">
-          <h1 className="text-3xl font-bold mb-6 text-white">Browse Lawyers</h1>
+          <h1 className="text-3xl font-bold mb-6 text-gray-800">Browse Lawyers</h1>
           {loading ? <div>Loading lawyers...</div> :
             lawyers.length === 0 ? <div>No lawyers match your criteria.</div> :
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {lawyers.map(lawyer => (
-                  <div key={lawyer.id} className="bg-[#f8e7bdf3] rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
+                  <div key={lawyer.id} className="bg-white/80 backdrop-blur-sm rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
                     <img src={lawyer.image_url} onError={e => { e.currentTarget.src = "https://legaleasenew.blob.core.windows.net/profilepic/lawyer.png"; }} alt={lawyer.name} className="w-full h-40 object-cover rounded-md mb-4" />
                     <h3 className="text-xl font-semibold">{lawyer.name}</h3>
                     <p className="text-sm text-gray-600">{lawyer.specialization}</p>
@@ -117,7 +113,6 @@ const BrowseLawyers = () => {
           }
         </main>
       </div>
-
       <Footer />
     </div>
   );

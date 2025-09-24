@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const HeroSection = () => {
   return (
     <section
-      className="relative min-h-screen bg-center bg-cover bg-no-repeat flex items-center justify-end"
+      className="relative min-h-screen bg-center bg-cover bg-no-repeat flex items-center justify-baseline"
       style={{ backgroundImage: `url(${heroImage})` }}
     >
       {/* Gradient Overlay */}

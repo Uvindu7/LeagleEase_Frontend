@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import Navbar from "../Components/Navbar";
+import Footer from "../Components/Footer";
 
 const Reviews = () => {
   const location = useLocation();
@@ -56,7 +58,9 @@ const Reviews = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#f1e4c3] via-[#d4b97a] to-[#6e4d1e] py-10">
+    <div>
+    <Navbar/>
+    <div className="min-h-screen bg-[#f5f2eb] mt-18">
       <div className="max-w-5xl mx-auto px-4">
 
         {/* Lawyer Header */}
@@ -101,7 +105,7 @@ const Reviews = () => {
 
             <button
               type="submit"
-              className="bg-[#6e4d1e] text-white py-2 px-4 rounded-lg shadow hover:bg-[#5a3e17] transition"
+              className="bg-[#6e4d1e] text-[#6e4d1e] py-2 px-4 rounded-lg shadow hover:bg-[#5a3e17] transition"
             >
               Submit Review
             </button>
@@ -110,9 +114,9 @@ const Reviews = () => {
 
         {/* Reviews List */}
         <div>
-          <h3 className="text-2xl font-semibold mb-4 text-white">⭐ All Reviews</h3>
+          <h3 className="text-2xl font-semibold mb-4 text-[#6e4d1e]">⭐ All Reviews</h3>
           {reviews.length === 0 ? (
-            <p className="text-gray-100">No reviews yet. Be the first!</p>
+            <p className="text-[#6e4d1e]">No reviews yet. Be the first!</p>
           ) : (
             <div className="grid md:grid-cols-2 gap-6">
               {reviews.map((rev) => (
@@ -128,6 +132,8 @@ const Reviews = () => {
         </div>
 
       </div>
+    </div>
+    <Footer/>
     </div>
   );
 };
