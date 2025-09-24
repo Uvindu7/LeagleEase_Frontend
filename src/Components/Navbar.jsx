@@ -11,15 +11,22 @@ const Navbar = () => {
     setUserRole(role);
   }, []);
 
-const menuItems = [
-  {
-    label: "My Account",
-    path: userRole === "lawyer" ? "/lawyer" : "/client",
-  },
-  { label: "Home", path: "/home" },
-  { label: "About", path: "/aboutus" },
-  { label: "Features", path: "/features" },
-];
+  const handleMyAccount = () => {
+    if (userRole === "lawyer") {
+      navigate("/lawyer");
+    } else if (userRole === "client") {
+      navigate("/client");
+    } else {
+      navigate("/login"); // fallback
+    }
+  };
+
+  const menuItems = [
+    { label: "My Account", onClick: handleMyAccount },
+    { label: "Home", path: "/home" },
+    { label: "About", path: "/aboutus" },
+    { label: "Features", path: "/features" },
+  ];
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-[#4b4030cc] backdrop-blur-md shadow-lg z-50">
@@ -39,7 +46,9 @@ const menuItems = [
             {menuItems.map((item) => (
               <li
                 key={item.label}
-                onClick={() => navigate(item.path)}
+                onClick={() =>
+                  item.path ? navigate(item.path) : item.onClick()
+                }
                 className="hover:text-white cursor-pointer transition"
               >
                 {item.label}
@@ -80,7 +89,7 @@ const menuItems = [
                 key={item.label}
                 className="hover:text-white cursor-pointer transition"
                 onClick={() => {
-                  navigate(item.path);
+                  item.path ? navigate(item.path) : item.onClick();
                   setMenuOpen(false);
                 }}
               >
@@ -106,5 +115,3 @@ const menuItems = [
 };
 
 export default Navbar;
-
-
