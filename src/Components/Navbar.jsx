@@ -1,24 +1,35 @@
-import React, { useState } from "react";
-import { UserPlus } from "lucide-react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate(); // React Router hook
+  const [userRole, setUserRole] = useState(null); // "client" or "lawyer"
+  const navigate = useNavigate();
 
-  const menuItems = [
-    { label: "My Account", path: "/client"},
-    { label: "Home", path: "/home" },
-    { label: "About", path: "/aboutus" },
-    { label: "Features", path: "/features" },
-  ];
+  useEffect(() => {
+    const role = localStorage.getItem("userRole");
+    setUserRole(role);
+  }, []);
+
+const menuItems = [
+  {
+    label: "My Account",
+    path: userRole === "lawyer" ? "/lawyer" : "/client",
+  },
+  { label: "Home", path: "/home" },
+  { label: "About", path: "/aboutus" },
+  { label: "Features", path: "/features" },
+];
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-[#4b4030cc] backdrop-blur-md shadow-lg z-50">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-12 py-4 relative">
 
         {/* Logo */}
-        <div className="text-[#f3d999] text-3xl font-extrabold tracking-wide cursor-pointer select-none drop-shadow-lg z-20">
+        <div
+          className="text-[#f3d999] text-3xl font-extrabold tracking-wide cursor-pointer select-none drop-shadow-lg z-20"
+          onClick={() => navigate("/home")}
+        >
           LegalEase
         </div>
 
@@ -37,18 +48,20 @@ const Navbar = () => {
           </ul>
         </div>
 
-        {/* Action Buttons */}
+        {/* Logout */}
         <div className="hidden md:flex items-center space-x-6 z-20">
-          {/* Logout Button */}
           <button
-            onClick={() => navigate('/')}
+            onClick={() => {
+              localStorage.clear();
+              navigate("/");
+            }}
             className="bg-[#f3d999] text-[#4b4030] font-semibold px-6 py-2 rounded-full shadow-lg hover:scale-105 transform transition duration-300 focus:outline-none focus:ring-2 focus:ring-red-300"
           >
             Logout
           </button>
         </div>
 
-        {/* Hamburger Icon */}
+        {/* Mobile Menu Toggle */}
         <div className="md:hidden z-30">
           <button
             onClick={() => setMenuOpen(!menuOpen)}
@@ -75,10 +88,10 @@ const Navbar = () => {
               </div>
             ))}
 
-            {/* Logout Button for Mobile */}
             <button
               onClick={() => {
-                navigate('/');
+                localStorage.clear();
+                navigate("/");
                 setMenuOpen(false);
               }}
               className="w-3/4 mx-auto bg-[#f3d999] text-[#4b4030] font-semibold px-5 py-2 rounded-full shadow-lg hover:scale-105 transform transition duration-300 focus:outline-none focus:ring-2 focus:ring-red-300"
@@ -93,3 +106,5 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+

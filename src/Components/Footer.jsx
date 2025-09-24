@@ -1,5 +1,6 @@
 import React from 'react';
 import logo from '../assets/logo.jpg';
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -31,7 +32,8 @@ const Footer = () => {
           <h3 className="text-lg font-semibold mb-3">Support</h3>
           <ul className="space-y-2 text-[#f3d999cc] text-sm">
             <li className="hover:text-white cursor-pointer transition">Help Center</li>
-            <li className="hover:text-white cursor-pointer transition">Contact Us</li>
+            <li className="hover:text-white cursor-pointer transition">
+            <Link to="/feedback">Contact Us</Link></li>
             <li className="hover:text-white cursor-pointer transition">Documentation</li>
             <li className="hover:text-white cursor-pointer transition">Community</li>
           </ul>
@@ -41,7 +43,7 @@ const Footer = () => {
         <div>
           <h3 className="text-lg font-semibold mb-3">Contact</h3>
           <ul className="space-y-2 text-[#f3d999cc] text-sm">
-            <li className="hover:text-white cursor-pointer transition">support@legalease.lk</li>
+            <li className="hover:text-white cursor-pointer transition">legaleaseproject1@gmail.com</li>
             <li className="hover:text-white cursor-pointer transition">+94 716949819</li>
             <li className="hover:text-white cursor-pointer transition">Badulla, Sri Lanka</li>
           </ul>

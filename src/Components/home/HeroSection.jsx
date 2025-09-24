@@ -1,5 +1,5 @@
 import React from 'react';
-import heroImage from '../../assets/back1.jpg';
+import heroImage from '../../assets/background.webp';
 import { Link } from "react-router-dom";
 
 const HeroSection = () => {
@@ -27,9 +27,11 @@ const HeroSection = () => {
             Find a Lawyer
           </button>
           </Link>
+          <Link to="/aboutus">
           <button className="bg-white text-gray-900 px-8 py-4 rounded-full font-semibold hover:bg-gray-200 transition transform hover:scale-105 duration-300 shadow-lg">
             Learn How It Works
           </button>
+          </Link>
         </div>
       </div>
     </section>

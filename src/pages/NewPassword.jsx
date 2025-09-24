@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 export default function ChangePassword() {
-  const [searchParams] = useSearchParams();
-  const email = searchParams.get("email");
+  const { email } = useParams(); // <-- now email comes from route param
+  const navigate = useNavigate();
 
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -13,7 +13,7 @@ export default function ChangePassword() {
     e.preventDefault();
 
     if (password !== confirm) {
-      setMessage("Passwords do not match!");
+      setMessage("❌ Passwords do not match!");
       return;
     }
 
@@ -22,23 +22,26 @@ export default function ChangePassword() {
       formData.append("email", email);
       formData.append("password", password);
 
-      const response = await fetch("http://localhost/backend/api/new_password.php", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "http://localhost/backend/api/new_password.php",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       const data = await response.json();
 
       if (data.success) {
-        setMessage("Password changed successfully! Redirecting to login...");
+        setMessage("✅ Password changed successfully! Redirecting to login...");
         setTimeout(() => {
-          window.location.href = "/login";
+          navigate("/login");
         }, 2000);
       } else {
-        setMessage(data.error || "Error updating password.");
+        setMessage(data.error || "⚠️ Error updating password.");
       }
     } catch (err) {
-      setMessage("Server error. Try again later.");
+      setMessage("⚠️ Server error. Try again later.");
     }
   };
 
@@ -72,7 +75,17 @@ export default function ChangePassword() {
             Update Password
           </button>
         </form>
-        {message && <p className="mt-4 text-center text-red-500">{message}</p>}
+        {message && (
+          <p
+            className={`mt-4 text-center ${
+              message.includes("✅")
+                ? "text-green-600"
+                : "text-red-500"
+            }`}
+          >
+            {message}
+          </p>
+        )}
       </div>
     </div>
   );

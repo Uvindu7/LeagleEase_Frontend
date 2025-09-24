@@ -46,7 +46,7 @@ export default function ResetPassword() {
         const data = await response.json(); 
         
         if (data.success) { 
-            window.location.href = `/changepassword?email=${email}`; 
+            window.location.href = `/newpassword/${email}`; 
         } else { 
           setMessage(data.error || "❌ Invalid OTP."); 
         } 

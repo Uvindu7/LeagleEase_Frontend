@@ -17,8 +17,11 @@ import NewPassword from "./pages/NewPassword";
 import AboutUs from "./pages/AboutUs";
 import Reviews from "./pages/Reviews";
 import Settings from "./pages/Settings";
-
-
+import Feedback from "./pages/Feedback";
+import ClientAppointments from "./pages/ClientAppointments";
+import ClientNotifications from "./Components/client/Notifications";
+import LawyerNotifications from "./Components/lawyer/NotificatioSection";
+import LawyerAppointments from "./pages/LawyerAppointments";
 
 function App() {
   return (
@@ -61,7 +64,7 @@ function App() {
         <Route path="/resetpassword" element={<ResetPassword />} />
 
         {/* New Password Page*/}
-        <Route path="/newpassword" element={<NewPassword />} />
+        <Route path="/newpassword/:email" element={<NewPassword />} />
 
         {/* About Us Page*/}
         <Route path="/aboutus" element={<AboutUs />} />
@@ -69,9 +72,19 @@ function App() {
         {/* Review Page*/}
         <Route path="/reviews" element={<Reviews />} />
         
-         {/* Setting Page*/}
+        {/* Setting Page*/}
         <Route path="/settings" element={<Settings />} />
 
+        {/* Feedback Page*/}
+        <Route path="/feedback" element={<Feedback />} />
+
+        <Route path="/appointments" element={<ClientAppointments />} />
+
+        <Route path="/clientNotifications" element={<ClientNotifications />} />
+
+        <Route path="/lawyerNotifications" element={<LawyerNotifications />} />
+
+        <Route path="/lawyerAppointments" element={<LawyerAppointments />} />
       </Routes>
     </Router>
   );

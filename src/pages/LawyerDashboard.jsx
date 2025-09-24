@@ -35,7 +35,7 @@ const LawyerDashboard = () => {
           <div className="flex flex-col lg:flex-row gap-4">
             {/* Calendar Section */}
             <div className="flex-1">
-              <CalendarSection/>
+            <CalendarSection/>
             </div>
 
             {/* Notifications Section */}

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Home, Search, Calendar, Bell, Settings, Menu, X } from "lucide-react";
-import profilePhoto from "../../assets/lawyerprofile.jpg";
 
 const Sidebar = ({ isOpen, onClose, onOpen }) => {
   const [user, setUser] = useState(null);
@@ -28,9 +27,8 @@ const Sidebar = ({ isOpen, onClose, onOpen }) => {
 
   const menuItems = [
     { icon: Home, label: "Dashboard", path: "/lawyer" },
-    { icon: Calendar, label: "Appointments", path: "/appointments" },
-    { icon: Search, label: "Messages", path: "/messages" },
-    { icon: Bell, label: "Notifications", path: "/notifications" },
+    { icon: Calendar, label: "Appointments", path: "/lawyerAppointments" },
+    { icon: Bell, label: "Notifications", path: "/lawyerNotifications" },
     { icon: Settings, label: "Settings", path: "/settings" },
   ];
 
@@ -66,10 +64,11 @@ const Sidebar = ({ isOpen, onClose, onOpen }) => {
         {/* Profile Section */}
         <div className="flex flex-col items-center mb-10">
           <img
-            src={user?.profile_photo || profilePhoto}
+            src={user?.profile_picture || "https://legaleasenew.blob.core.windows.net/profilepic/lawyer.png"}
             alt="Profile"
             className="w-24 h-24 rounded-full object-cover mb-3 border-4 border-white shadow-md ring-2 ring-[#4e4234]"
           />
+
           <Link
             to="/settings"
             className="text-xl font-semibold hover:text-gray-300 transition"
@@ -110,4 +109,3 @@ const Sidebar = ({ isOpen, onClose, onOpen }) => {
 };
 
 export default Sidebar;
-

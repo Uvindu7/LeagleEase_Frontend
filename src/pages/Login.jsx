@@ -28,11 +28,16 @@ const Login = () => {
       if (data.success) {
         setMessage("Login successful!");
         const role = data.data.role;
+        localStorage.setItem("userRole", role);
+
+
         if(role === "client"){
           navigate("/client");
-        }else{
+        }else if(role == "lawyer"){
           navigate("/lawyer");
-        }
+        }else(
+          navigate("/admin")
+        )
       } else {
         setMessage(data.message);
       }

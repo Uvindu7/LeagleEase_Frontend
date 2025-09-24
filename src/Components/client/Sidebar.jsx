@@ -30,8 +30,8 @@ const Sidebar = ({ isOpen, onClose, onOpen }) => {
   const menuItems = [
     { icon: Home, label: 'Dashboard', path: '/client' },
     { icon: Search, label: 'Browse Lawyers', path: '/browselawyers' },
-    { icon: Calendar, label: 'Appointments', path: '/calender' },
-    { icon: Bell, label: 'Notifications', path: '/notifications' },
+    { icon: Calendar, label: 'Appointments', path: '/appointments' },
+    { icon: Bell, label: 'Notifications', path: '/clientNotifications' },
     { icon: Settings, label: 'Settings', path: '/settings' },
   ];
 

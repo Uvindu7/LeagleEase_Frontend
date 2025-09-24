@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 // Backend API base URL
-const API_BASE = "http://localhost/backend/api";
+const API_BASE = "http://localhost/LeagleEase_Backend/api";
 
 const AdminDashboard = () => {
   const [pendingLawyers, setPendingLawyers] = useState([]);
@@ -60,14 +60,14 @@ const AdminDashboard = () => {
         method: "DELETE"
       });
       if (res.ok) {
-        alert("Lawyer request rejected!");
+        alert("Lawyer request deleted!");
         fetchData(); // Refresh data after deletion
       } else {
-        alert("Rejection failed!");
+        alert("Deletion failed!");
       }
     } catch (err) {
       console.error(err);
-      alert("Server error during rejection.");
+      alert("Server error during deletion.");
     }
   };
 
@@ -79,67 +79,52 @@ const AdminDashboard = () => {
       <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
 
       {/* Pending Lawyers */}
-<div className="bg-white rounded-lg shadow-md p-4 mb-8">
-  <h2 className="text-xl font-semibold mb-4">Pending Lawyer Approvals</h2>
-  <table className="w-full border border-gray-300">
-    <thead className="bg-gray-200">
-      <tr>
-        <th className="p-2 border">Name</th>
-        <th className="p-2 border">Email</th>
-        <th className="p-2 border">Specialization</th>
-        <th className="p-2 border">Verification Document</th>
-        <th className="p-2 border">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {pendingLawyers.length > 0 ? (
-        pendingLawyers.map((lawyer) => (
-          <tr key={lawyer.user_id} className="text-center">
-            <td className="p-2 border">{lawyer.name}</td>
-            <td className="p-2 border">{lawyer.email}</td>
-            <td className="p-2 border">{lawyer.specialization}</td>
-            
-            {/* ✅ Verification Document Button */}
-            <td className="p-2 border">
-              {lawyer.document_path ? (
-                <button
-                  onClick={() => window.open(lawyer.document_path, "_blank")}
-                  className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                >
-                  View Document
-                </button>
-              ) : (
-                <span className="text-gray-500">No Document</span>
-              )}
-            </td>
-
-            <td className="p-2 border space-x-2">
-              <button
-                onClick={() => handleApprove(lawyer.user_id)}
-                className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-              >
-                Approve
-              </button>
-              <button
-                onClick={() => handleDelete(lawyer.user_id)}
-                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-              >
-                Reject
-              </button>
-            </td>
-          </tr>
-        ))
-      ) : (
-        <tr>
-          <td colSpan="5" className="p-2 border text-center">
-            No pending lawyers found.
-          </td>
-        </tr>
-      )}
-    </tbody>
-  </table>
-</div>
-
+      <div className="bg-white rounded-lg shadow-md p-4 mb-8">
+        <h2 className="text-xl font-semibold mb-4">Pending Lawyer Approvals</h2>
+        <table className="w-full border border-gray-300">
+          <thead className="bg-gray-200">
+            <tr>
+              <th className="p-2 border">ID</th>
+              <th className="p-2 border">Name</th>
+              <th className="p-2 border">Email</th>
+              <th className="p-2 border">Specialization</th>
+              <th className="p-2 border">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pendingLawyers.length > 0 ? (
+              pendingLawyers.map((lawyer) => (
+                <tr key={lawyer.id} className="text-center">
+                  <td className="p-2 border">{lawyer.id}</td>
+                  <td className="p-2 border">{lawyer.name}</td>
+                  <td className="p-2 border">{lawyer.email}</td>
+                  <td className="p-2 border">{lawyer.specialization}</td>
+                  <td className="p-2 border space-x-2">
+                    <button
+                      onClick={() => handleApprove(lawyer.id)}
+                      className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                    >
+                      Approve
+                    </button>
+                    <button
+                      onClick={() => handleDelete(lawyer.id)}
+                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" className="p-2 border text-center">
+                  No pending lawyers found.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {/* All Users */}
       <div className="bg-white rounded-lg shadow-md p-4">
@@ -147,18 +132,24 @@ const AdminDashboard = () => {
         <table className="w-full border border-gray-300">
           <thead className="bg-gray-200">
             <tr>
+              <th className="p-2 border">ID</th>
               <th className="p-2 border">Name</th>
               <th className="p-2 border">Email</th>
               <th className="p-2 border">Role</th>
+              <th className="p-2 border">Verified</th>
             </tr>
           </thead>
           <tbody>
             {users.length > 0 ? (
               users.map((user) => (
                 <tr key={user.id} className="text-center">
+                  <td className="p-2 border">{user.id}</td>
                   <td className="p-2 border">{user.name}</td>
                   <td className="p-2 border">{user.email}</td>
                   <td className="p-2 border">{user.role}</td>
+                  <td className="p-2 border">
+                    {user.verified ? "✅ Yes" : "❌ No"}
+                  </td>
                 </tr>
               ))
             ) : (

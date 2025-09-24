@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import backgroundImg from '../assets/background.webp';
 
 const Register = () => {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -13,7 +15,8 @@ const Register = () => {
     role: '',
     gender: '',
     lawyerId: '',
-    registerDate: ''
+    registerDate: '',
+    specialization: ''
   });
 
   const [message, setMessage] = useState('');
@@ -45,14 +48,16 @@ const Register = () => {
     }
 
     try {
-      const res = await fetch("http://localhost/LeagleEase_Backend/api/register.php", {
+      const res = await fetch("http://localhost/backend/api/register.php", {
         method: "POST",
         body: formData,
+        credentials: 'include'
       });
 
       const text = await res.text();
       const data = JSON.parse(text);
       setMessage(data.message || "✅ Registration complete.");
+      navigate("/login");
     } catch (err) {
       console.error("❌ Fetch error:", err);
       setMessage("⚠️ Server error or invalid response.");
@@ -79,7 +84,7 @@ const Register = () => {
           <select name="role" value={form.role} onChange={handleChange} required
             className="w-full px-4 py-2 mb-4 text-black bg-white rounded-md">
             <option value="">Register as:</option>
-            <option value="user">User</option>
+            <option value="client">User</option>
             <option value="lawyer">Lawyer</option>
           </select>
 
@@ -94,16 +99,27 @@ const Register = () => {
                 className="w-full px-4 py-2 mb-4 text-black bg-white rounded-md outline-none"
               />
               <input
-                type="date-local"
+                type="date"
                 name="registerDate"
-                placeholder="Enter Register Date"
                 onChange={handleChange}
                 value={form.registerDate}
                 required
                 className="w-full px-4 py-2 mb-4 text-black bg-white rounded-md outline-none"
               />
+              <select
+                name="specialization"
+                onChange={handleChange}
+                value={form.specialization}
+                required
+                className="w-full px-4 py-2 mb-4 text-black bg-white rounded-md"
+              >
+                <option value="">Select Specialization</option>
+                <option value="criminal">Criminal Law</option>
+                <option value="corporate">Corporate Law</option>
+                <option value="family">Family Law</option>
+                <option value="civil">Civil Law</option>
+              </select>
               <div className="mb-4">
-                
                 <input
                   type="file"
                   name="verification_doc"

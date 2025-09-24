@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Settings() {
-  const [form, setForm] = useState({ full_name: "", email: "", password: "", profile_photo: "" });
+  const [form, setForm] = useState({ full_name: "", email: "", profile_photo: "" });
+  const [photoFile, setPhotoFile] = useState(null);
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   // Load current user
   useEffect(() => {
@@ -16,7 +19,6 @@ export default function Settings() {
           setForm({
             full_name: data.data.full_name,
             email: data.data.email,
-            password: "",
             profile_photo: data.data.profile_photo || "",
           });
         }
@@ -32,15 +34,27 @@ export default function Settings() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // Handle file selection
+  const handleFileChange = (e) => {
+    setPhotoFile(e.target.files[0]);
+  };
+
   // Submit updated user details
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const formData = new FormData();
+      formData.append("full_name", form.full_name);
+      formData.append("email", form.email);
+
+      if (photoFile) {
+        formData.append("profile_photo", photoFile);
+      }
+
       const res = await fetch("http://localhost/backend/api/updateuser.php", {
         method: "POST",
         credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: formData,
       });
       const data = await res.json();
       setMessage(data.message);
@@ -71,23 +85,39 @@ export default function Settings() {
           onChange={handleChange}
           className="w-full border p-2 rounded"
         />
-        <input
-          type="password"
-          name="password"
-          placeholder="New Password (optional)"
-          value={form.password}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-        />
-        <input
-          type="text"
-          name="profile_photo"
-          placeholder="Profile Photo URL"
-          value={form.profile_photo}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-        />
-        <button type="submit" className="bg-[#3e352a] text-white px-4 py-2 rounded">
+
+        {/* ✅ Upload photo instead of text input */}
+        <div>
+          <label className="block mb-2 font-semibold">Profile Photo:</label>
+          <input
+            type="file"
+            name="profile_photo"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="w-full border p-2 rounded"
+          />
+          {form.profile_photo && (
+            <img
+              src={form.profile_photo}
+              alt="Profile"
+              className="mt-3 w-24 h-24 rounded-full object-cover border"
+            />
+          )}
+        </div>
+
+        {/* ✅ Reset password button */}
+        <button
+          type="button"
+          onClick={() => navigate("/resetpassword")}
+          className="bg-[#a68e56] text-white px-4 py-2 rounded w-full hover:bg-[#e0d4aa] transition"
+        >
+          Reset Password
+        </button>
+
+        <button
+          type="submit"
+          className="bg-[#3e352a] text-white px-4 py-2 rounded w-full hover:bg-[#5c4a3b] transition"
+        >
           Save Changes
         </button>
       </form>

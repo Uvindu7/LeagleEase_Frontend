@@ -1,129 +1,202 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
-import Navbar from '../Components/Navbar';
-import Footer from '../Components/Footer';
-import backgroundImg from '../assets/browse lawyer bg.jpg';
+import { CheckBadgeIcon, CalendarDaysIcon, StarIcon } from "@heroicons/react/24/solid";
+import Navbar from "../Components/Navbar";
+import Footer from "../Components/Footer";
 
-const stripePromise = loadStripe("pk_test_51RwGmxC0IqUbyDKdGsDp40y18GoXlmNkNtt8vNQROmwMLADljtK6mwHvrJROPxPR79rdFmilC3ZH21uPlYz5chEq00uI6bFx18"); // Replace with your publishable key
+const stripePromise = loadStripe("pk_test_51RwGmxC0IqUbyDKdGsDp40y18GoXlmNkNtt8vNQROmwMLADljtK6mwHvrJROPxPR79rdFmilC3ZH21uPlYz5chEq00uI6bFx18");
 
 export default function AppointmentBooking() {
   const location = useLocation();
   const navigate = useNavigate();
-  const lawyer = location.state?.lawyer;
+  const [searchParams] = useSearchParams();
 
+  const client_id = 1; // Replace with logged-in user ID
+
+  // 1️⃣ Get lawyer from state, localStorage, or query params
+  let lawyer = location.state?.lawyer;
   if (!lawyer) {
-    navigate("/browse");
-    return null;
+    const storedLawyer = localStorage.getItem("bookingLawyer");
+    if (storedLawyer) {
+      lawyer = JSON.parse(storedLawyer);
+    } else {
+      const lawyerId = searchParams.get("lawyer_id");
+      const lawyerName = searchParams.get("lawyer_name");
+      if (lawyerId && lawyerName) {
+        lawyer = { id: parseInt(lawyerId), name: lawyerName, fee: 5000 };
+      }
+    }
   }
 
-  const [selectedSlot, setSelectedSlot] = useState('');
-  const [description, setDescription] = useState('');
-
-  const timeSlots = [
-    "9:00 AM", "10:00 AM", "11:00 AM", "1:00 PM",
-    "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM",
-  ];
-
-  // Show success/fail alert based on URL query
+  // Redirect if no lawyer info
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const payment = params.get("payment");
-    if (payment === "success") alert("✅ Payment successful! Your appointment is booked.");
-    if (payment === "failed") alert("❌ Payment failed. Please try again.");
-  }, []);
+    if (!lawyer || !lawyer.id) navigate("/browselawyers");
+  }, [lawyer, navigate]);
 
-  const handleBooking = async () => {
-    if (!selectedSlot) {
-      alert("Please select a time slot");
-      return;
+  const price = lawyer?.fee ? lawyer.fee * 100 : 5000;
+  const [availability, setAvailability] = useState([]);
+  const [selectedSlot, setSelectedSlot] = useState('');
+  const [loadingSlots, setLoadingSlots] = useState(true);
+  const [paymentMessage, setPaymentMessage] = useState('');
+  const [messageType, setMessageType] = useState(''); // 'success' or 'error'
+
+  // Fetch lawyer availability
+  const fetchAvailability = async () => {
+    if (!lawyer?.id) return;
+    setLoadingSlots(true);
+    try {
+      const response = await fetch(`http://localhost/backend/api/get_lawyer_availability.php?lawyer_id=${lawyer.id}`);
+      if (!response.ok) throw new Error("Failed to fetch availability");
+      const json = await response.json();
+      setAvailability(json.success === "success" ? json.data : []);
+    } catch (error) {
+      console.error(error);
+      setAvailability([]);
+    } finally {
+      setLoadingSlots(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAvailability();
+  }, [lawyer?.id]);
+
+  // Check payment result from URL
+  useEffect(() => {
+    const payment = searchParams.get("payment");
+    if (payment === "success") {
+      setPaymentMessage("✅ Payment successful! Your appointment is booked.");
+      setMessageType('success');
+      fetchAvailability(); // Refresh available slots
+    } else if (payment === "failed") {
+      setPaymentMessage("❌ Payment failed. Please try again.");
+      setMessageType('error');
     }
 
+    if (payment) {
+      const timer = setTimeout(() => setPaymentMessage(''), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams]);
+
+  const handleBooking = async () => {
+    if (!selectedSlot) return alert("Please select a slot");
     try {
-      const res = await fetch("http://localhost/backend/payment.php", {
+      const res = await fetch("http://localhost/backend/api/payment.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           slot: selectedSlot,
-          description,
-          lawyer: lawyer.name,
-          price: 5000, // Amount in cents
+          lawyer_id: lawyer.id,
+          price,
+          lawyer_name: lawyer.name,
         }),
+        credentials: "include",
       });
 
       const session = await res.json();
-      if (session.error) {
-        alert("Error: " + session.error);
-        return;
-      }
+      if (session.error) return alert(session.error);
 
       const stripe = await stripePromise;
-      if (!session.id) {
-        alert("Payment failed. Please try again.");
-        return;
-      }
-
       await stripe.redirectToCheckout({ sessionId: session.id });
-
-    } catch (error) {
-      console.error(error);
-      alert("Payment failed. Please try again.");
+    } catch (e) {
+      console.error(e);
+      alert("Payment failed");
     }
   };
 
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      stars.push(
+        <StarIcon key={i} className={`w-5 h-5 ${i <= rating ? "text-yellow-500" : "text-gray-300"}`} />
+      );
+    }
+    return <div className="flex justify-center mt-2">{stars}</div>;
+  };
+
+  const ratingValue = Math.round(lawyer?.rating || lawyer?.avg_rating || 0);
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex flex-col min-h-screen bg-[#f5f2eb]">
       <Navbar />
-      <div
-        className="flex flex-1 items-center justify-center bg-gray-100 text-black p-6 mt-14"
-        style={{ backgroundImage: `url(${backgroundImg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
-      >
-        <div className="w-full max-w-2xl bg-gradient-to-b from-[#f1e4c3df] via-[#c5a473d3] to-[#6e4d1ee5] backdrop-blur-2xl rounded-lg shadow-lg p-6">
+      <main className="flex-1 flex items-center justify-center px-4 py-6 pt-24">
+        {lawyer ? (
+          <div className="w-full max-w-xl bg-white/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 flex flex-col gap-6">
 
-          {/* Lawyer Info */}
-          <div className="bg-[#f8e7bde0] shadow-md rounded-lg p-4 flex items-center gap-6 mb-6">
-            <h2 className="text-2xl font-bold">{lawyer.name}</h2>
-            <p className="text-gray-600">{lawyer.specialization}</p>
-          </div>
-
-          {/* Time Slots */}
-          <div className="bg-[#f8e7bde0] shadow-md rounded-lg p-6 mb-6">
-            <h3 className="text-xl font-semibold mb-4">Select a Time Slot</h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {timeSlots.map((slot, i) => (
-                <button
-                  key={i}
-                  onClick={() => setSelectedSlot(slot)}
-                  className={`px-4 py-2 rounded border transition ${selectedSlot === slot ? 'bg-blue-600 text-white' : 'bg-gray-200 hover:bg-blue-100'}`}
-                >
-                  {slot}
-                </button>
-              ))}
+            {/* Lawyer Profile */}
+            <div className="flex flex-col items-center">
+              <img
+                src={lawyer.profile_picture || lawyer.image_url || "/default-profile.png"}
+                alt={lawyer.name}
+                className="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover"
+              />
+              <div className="mt-4 text-center w-full">
+                <div className="flex items-center justify-center gap-2">
+                  <h2 className="text-2xl font-bold text-[#6e4e13] drop-shadow">{lawyer.name}</h2>
+                  {lawyer.verified && <CheckBadgeIcon className="w-6 h-6 text-green-500" title="Verified" />}
+                </div>
+                <div className="text-[#8a7750]">{lawyer.specialization}</div>
+                {lawyer.yearsExperience && <div className="text-[#ac9770] text-sm">{lawyer.yearsExperience} years of experience</div>}
+                {renderStars(ratingValue)}
+                <div className="text-green-700 font-semibold mt-1">Fee: Rs. {lawyer.fee}</div>
+              </div>
             </div>
-          </div>
 
-          {/* Booking Form */}
-          <div className="bg-[#f8e7bde0] shadow-md rounded-lg p-6">
-            <h3 className="text-xl font-semibold mb-4">Booking Details</h3>
-            <textarea
-              placeholder="Description (optional)"
-              className="w-full p-3 border rounded mb-4 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#b1a886]"
-              rows={4}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
+            {/* Payment Message */}
+            {paymentMessage && (
+              <div className={`p-2 text-center rounded ${messageType === 'success' ? 'bg-green-200' : 'bg-red-200'}`}>
+                {paymentMessage}
+              </div>
+            )}
+
+            {/* Availability */}
+            <div>
+              <div className="flex items-center mb-2 text-[#6e4e13]">
+                <CalendarDaysIcon className="w-5 h-5 mr-2" />
+                <span className="font-medium">Available Times:</span>
+              </div>
+              {loadingSlots ? <p>Loading slots...</p> :
+                <div className="flex flex-col gap-2">
+                  {availability.map((day) => (
+                    <div key={day.date}>
+                      <p className="font-semibold mb-1 text-[#6e4e13]">{day.date}</p>
+                      <div className="flex gap-2 flex-wrap">
+                        {day.slots.map((time) => {
+                          const slotStr = `${day.date} ${time}`;
+                          return (
+                            <button
+                              key={time}
+                              onClick={() => setSelectedSlot(slotStr)}
+                              className={`px-3 py-1 rounded border text-sm transition ${selectedSlot === slotStr ? "bg-blue-600 text-white" : "bg-gray-200 hover:bg-blue-100"}`}
+                            >
+                              {time}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              }
+            </div>
+
+            {/* Book & Pay Button */}
             <button
               onClick={handleBooking}
-              className="bg-[#a68e56] hover:bg-[#b1a886] text-white px-6 py-3 rounded text-lg font-semibold w-full"
+              disabled={!selectedSlot}
+              className={`w-full py-3 font-semibold rounded shadow transition bg-gradient-to-tr from-[#a68e56] to-[#6e4e13] text-white hover:from-[#6e4e13] hover:to-[#a68e56] ${!selectedSlot ? "opacity-60 cursor-not-allowed" : ""}`}
             >
-              Confirm & Pay
+              Confirm & Pay Rs.{price / 100}
             </button>
-          </div>
 
-        </div>
-      </div>
+          </div>
+        ) : (
+          <p>Loading lawyer details...</p>
+        )}
+      </main>
       <Footer />
     </div>
   );
 }
-
