@@ -20,7 +20,7 @@ const ShortcutCards = () => {
 
       {/* Join Meeting Card */}
       <Link 
-        to="/meeting" 
+        to="/video" 
         className="bg-white/80 backdrop-blur-md border border-gray-200 p-6 rounded-3xl shadow-lg flex items-center justify-between cursor-pointer hover:scale-105 transition-transform duration-300 hover:shadow-2xl"
       >
         <div>

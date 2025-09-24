@@ -17,23 +17,23 @@ const Login = () => {
 
     try {
       const res = await fetch("http://localhost/backend/api/login.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(form),
-    });
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(form),
+      });
 
       const data = await res.json();
 
       if (data.success) {
+        // Here's the key addition: Store the user's ID in localStorage
+        localStorage.setItem('currentUserId', data.data.id); 
+
         setMessage("Login successful!");
         const role = data.data.role;
-        localStorage.setItem("userRole", role);
-
-
         if(role === "client"){
           navigate("/client");
-        }else if(role == "lawyer"){
+        }else if(role === "lawyer"){
           navigate("/lawyer");
         }else(
           navigate("/admin")
@@ -63,7 +63,7 @@ const Login = () => {
               name="username"
               value={form.username}
               onChange={handleChange}
-              placeholder="Username or Email"
+              placeholder="Email"
               required
               className="w-full h-full pl-3 pr-10 text-base text-black bg-transparent border border-black rounded-md outline-none placeholder-black"
             />
