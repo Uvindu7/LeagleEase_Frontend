@@ -11,7 +11,7 @@ const Reviews = () => {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [message, setMessage] = useState("");
-
+  const userID = localStorage.getItem("currentUserId");
   // Load reviews
   const loadReviews = () => {
     fetch(`http://localhost/backend/api/reviews.php?lawyer_id=${lawyer.id}`)
@@ -29,7 +29,7 @@ const Reviews = () => {
     e.preventDefault();
     const reviewData = {
       lawyer_id: lawyer.id,
-      client_id: 1, // replace with logged-in client id
+      client_id: userID,
       appointment_id: null,
       rating,
       comments: comment,

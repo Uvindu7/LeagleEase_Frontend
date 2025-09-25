@@ -2,9 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Settings() {
-  const [form, setForm] = useState({ full_name: "", email: "", profile_photo: "" });
+  const [form, setForm] = useState({
+    full_name: "",
+    email: "",
+    profile_photo: "",
+    fee: "", // 👈 add fee in state
+  });
   const [photoFile, setPhotoFile] = useState(null);
   const [message, setMessage] = useState("");
+  const [role, setRole] = useState(""); // 👈 track role
   const navigate = useNavigate();
 
   // Load current user
@@ -15,11 +21,17 @@ export default function Settings() {
           credentials: "include",
         });
         const data = await res.json();
+
         if (data.success === "success") {
+          // 👇 store role in localStorage (as you wanted)
+          
+          setRole(localStorage.getItem("userRole"));
+
           setForm({
             full_name: data.data.full_name,
             email: data.data.email,
             profile_photo: data.data.profile_photo || "",
+            fee: data.data.fee || "", // 👈 if lawyer, load existing fee
           });
         }
       } catch (err) {
@@ -46,6 +58,10 @@ export default function Settings() {
       const formData = new FormData();
       formData.append("full_name", form.full_name);
       formData.append("email", form.email);
+
+      if (role === "lawyer") {
+        formData.append("fee", form.fee); // 👈 only send fee if lawyer
+      }
 
       if (photoFile) {
         formData.append("profile_photo", photoFile);
@@ -85,6 +101,18 @@ export default function Settings() {
           onChange={handleChange}
           className="w-full border p-2 rounded"
         />
+
+        {/* ✅ Show fee input only for lawyers */}
+        {role === "lawyer" && (
+          <input
+            type="number"
+            name="fee"
+            placeholder="Consultation Fee"
+            value={form.fee}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+          />
+        )}
 
         {/* ✅ Upload photo instead of text input */}
         <div>

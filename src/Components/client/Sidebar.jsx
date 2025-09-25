@@ -66,8 +66,8 @@ const Sidebar = ({ isOpen, onClose, onOpen }) => {
 
         {/* Profile Section */}
         <div className="flex flex-col items-center mb-10">
-          <img
-            src={profilePhoto}
+          <img 
+            src={user ? user.profile_picture:profilePhoto}
             alt="User Profile"
             className="w-24 h-24 rounded-full object-cover mb-3 border-4 border-white shadow-md ring-2 ring-[#4e4234]"
           />
