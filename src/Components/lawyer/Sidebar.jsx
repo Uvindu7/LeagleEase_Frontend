@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Home, Search, Calendar, Bell, Settings, Menu, X } from "lucide-react";
+import defaultLawyerImg from "../../assets/lawyerprofile.jpg";
 
 const Sidebar = ({ isOpen, onClose, onOpen }) => {
   const [user, setUser] = useState(null);
@@ -64,7 +65,8 @@ const Sidebar = ({ isOpen, onClose, onOpen }) => {
         {/* Profile Section */}
         <div className="flex flex-col items-center mb-10">
           <img
-            src={user?.profile_picture || "https://legaleasenew.blob.core.windows.net/profilepic/lawyer.png"}
+            src={user?.profile_picture}
+            onError={e => { e.currentTarget.src = defaultLawyerImg; }}
             alt="Profile"
             className="w-24 h-24 rounded-full object-cover mb-3 border-4 border-white shadow-md ring-2 ring-[#4e4234]"
           />

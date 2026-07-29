@@ -4,6 +4,7 @@ import { CheckBadgeIcon, CalendarDaysIcon, StarIcon } from "@heroicons/react/24/
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import backgroundImg from "../assets/background.webp";
+import defaultLawyerImg from "../assets/lawyerprofile.jpg";
 
 export default function LawyerProfilePage() {
   const location = useLocation();
@@ -86,6 +87,7 @@ export default function LawyerProfilePage() {
             <img
               className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
               src={lawyer.image_url}
+              onError={e => { e.currentTarget.src = defaultLawyerImg; }}
               alt={lawyer.name}
             />
             <div className="mt-6 text-center w-full">

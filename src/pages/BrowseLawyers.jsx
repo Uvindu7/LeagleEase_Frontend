@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import { Link } from "react-router-dom";
+import defaultLawyerImg from '../assets/lawyerprofile.jpg';
 
 const BrowseLawyers = () => {
   const [lawyers, setLawyers] = useState([]);
@@ -28,15 +29,36 @@ const BrowseLawyers = () => {
 
         const json = await response.json();
         if (json.success === 'success') {
-          const normalized = json.data.map(l => ({
-            id: l.id,
-            name: l.name || "",
-            image_url: l.image_url || "https://legaleasenew.blob.core.windows.net/profilepic/lawyer.png",
-            specialization: l.specialization || "",
-            rating: l.avg_rating ? parseFloat(l.avg_rating).toFixed(1) : 0,
-            fee: l.fee || 0,
-            bio: l.bio || ""
-          }));
+          const normalized = json.data.map(l => {
+            const normalizedName = (l.name || "").replace(/\s+/g, ' ').trim();
+            const allowedLocalLawyers = [
+              "Dilani Fernando",
+              "Gamini Jayasinghe",
+              "Harini Weerasinghe",
+              "Kasun Jayawardena",
+              "Nadeesha Silva",
+              "Ruwan Gunasekara",
+              "Shalini Rajapaksha",
+              "Tharindu Perera"
+            ];
+            
+            let finalImageUrl = "";
+            if (allowedLocalLawyers.includes(normalizedName)) {
+              finalImageUrl = new URL(`../assets/lawyers/${normalizedName}.jpg`, import.meta.url).href;
+            } else {
+              finalImageUrl = defaultLawyerImg;
+            }
+
+            return {
+              id: l.id,
+              name: l.name || "",
+              image_url: finalImageUrl,
+              specialization: l.specialization || "",
+              rating: l.avg_rating ? parseFloat(l.avg_rating).toFixed(1) : 0,
+              fee: l.fee || 0,
+              bio: l.bio || ""
+            };
+          });
           setLawyers(normalized);
         } else {
           setLawyers([]);
@@ -96,7 +118,7 @@ const BrowseLawyers = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {lawyers.map(lawyer => (
                   <div key={lawyer.id} className="bg-white/80 backdrop-blur-sm rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
-                    <img src={lawyer.image_url} onError={e => { e.currentTarget.src = "https://legaleasenew.blob.core.windows.net/profilepic/lawyer.png"; }} alt={lawyer.name} className="w-full h-40 object-cover rounded-md mb-4" />
+                    <img src={lawyer.image_url} onError={e => { e.currentTarget.src = defaultLawyerImg; }} alt={lawyer.name} className="w-full h-40 object-cover rounded-md mb-4" />
                     <h3 className="text-xl font-semibold">{lawyer.name}</h3>
                     <p className="text-sm text-gray-600">{lawyer.specialization}</p>
                     <p className="text-sm mt-1">Rating: ⭐ {lawyer.rating}</p>
