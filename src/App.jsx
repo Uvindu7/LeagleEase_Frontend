@@ -15,6 +15,7 @@ import Start from "./pages/Start";
 import ResetPassword from "./pages/ResetPassword";
 import NewPassword from "./pages/NewPassword";
 import AboutUs from "./pages/AboutUs";
+import Features from "./pages/Features";
 import Reviews from "./pages/Reviews";
 import Settings from "./pages/Settings";
 import Feedback from "./pages/Feedback";
@@ -69,6 +70,9 @@ function App() {
 
         {/* About Us Page*/}
         <Route path="/aboutus" element={<AboutUs />} />
+
+        {/* Features Page */}
+        <Route path="/features" element={<Features />} />
 
         {/* Review Page*/}
         <Route path="/reviews" element={<Reviews />} />

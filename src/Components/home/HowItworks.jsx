@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 // Import your images
 import im1 from '../../assets/im1.jpg';
@@ -11,18 +12,21 @@ const steps = [
     title: 'Register',
     desc: 'Create your free LegalEase account and start your legal journey with ease.',
     img: im1,
+    link: '/features?tab=registration',
   },
   {
     step: '2',
     title: 'Book a Lawyer',
     desc: 'Find the perfect lawyer for your specific legal needs quickly and easily.',
     img: im2,
+    link: '/features?tab=booking',
   },
   {
     step: '3',
     title: 'Join Consultation',
     desc: 'Securely meet your lawyer via video call from anywhere at your convenience.',
     img: im3,
+    link: '/features?tab=consultation',
   }
 ];
 
@@ -37,10 +41,10 @@ const HowItWorks = () => {
 
         <div className="grid md:grid-cols-3 gap-14">
           {steps.map((s, idx) => (
-            <a
+            <Link
               key={idx}
-              href={s.link}
-              className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col transform hover:-translate-y-2 overflow-hidden"
+              to={s.link}
+              className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col transform hover:-translate-y-2 overflow-hidden hover:no-underline"
             >
               {/* Image Full Width */}
               <div className="relative w-full h-56 md:h-64 overflow-hidden">
@@ -66,7 +70,7 @@ const HowItWorks = () => {
                   Learn More
                 </span>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       </div>

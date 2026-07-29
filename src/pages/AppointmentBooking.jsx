@@ -4,6 +4,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { CheckBadgeIcon, CalendarDaysIcon, StarIcon } from "@heroicons/react/24/solid";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
+import defaultLawyerImg from "../assets/lawyerprofile.jpg";
 
 const stripePromise = loadStripe("pk_test_51RwGmxC0IqUbyDKdGsDp40y18GoXlmNkNtt8vNQROmwMLADljtK6mwHvrJROPxPR79rdFmilC3ZH21uPlYz5chEq00uI6bFx18");
 
@@ -128,7 +129,8 @@ export default function AppointmentBooking() {
             {/* Lawyer Profile */}
             <div className="flex flex-col items-center">
               <img
-                src={lawyer.profile_picture || lawyer.image_url || "/default-profile.png"}
+                src={lawyer.profile_picture || lawyer.image_url}
+                onError={e => { e.currentTarget.src = defaultLawyerImg; }}
                 alt={lawyer.name}
                 className="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover"
               />
