@@ -23,7 +23,7 @@ const HeroSection = () => {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-start w-full sm:w-auto">
           <Link to="/browselawyers">
-            <button className="bg-white text-gray-900 px-8 py-4 rounded-full font-semibold hover:bg-gray-200 transition transform hover:scale-105 duration-300 shadow-lg">
+            <button className="bg-white text-gray-900 px-8 py-4 rounded-full font-bold hover:bg-gray-200 transition transform hover:scale-105 duration-300 shadow-lg">
               Find a Lawyer
             </button>
           </Link>
