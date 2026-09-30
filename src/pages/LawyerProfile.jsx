@@ -12,6 +12,7 @@ export default function LawyerProfilePage() {
   const { lawyer } = location.state || {}; 
   const [availability, setAvailability] = useState([]);
   const [loadingSlots, setLoadingSlots] = useState(true);
+  const [imgLoaded, setImgLoaded] = useState(false);
 
   if (!lawyer) {
     return (
@@ -30,7 +31,7 @@ export default function LawyerProfilePage() {
     const fetchAvailability = async () => {
       setLoadingSlots(true);
       try {
-        const response = await fetch(`http://localhost/backend/api/get_lawyer_availability.php?lawyer_id=${lawyer.id}`);
+        const response = await fetch(`http://localhost:8000/api/get_lawyer_availability.php?lawyer_id=${lawyer.id}`);
         if (!response.ok) throw new Error("Failed to fetch availability");
         const json = await response.json();
         if (json.success === "success") {
@@ -84,12 +85,22 @@ export default function LawyerProfilePage() {
           
           {/* Profile Header */}
           <div className="flex flex-col items-center">
-            <img
-              className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
-              src={lawyer.image_url}
-              onError={e => { e.currentTarget.src = defaultLawyerImg; }}
-              alt={lawyer.name}
-            />
+            {/* Skeleton shimmer shown until image loads */}
+            <div className="relative w-32 h-32">
+              {!imgLoaded && (
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-white/20 via-white/40 to-white/20 animate-pulse border-4 border-white shadow-lg" />
+              )}
+              <img
+                className={`w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg transition-opacity duration-500 ${
+                  imgLoaded ? 'opacity-100' : 'opacity-0'
+                }`}
+                src={lawyer.image_url}
+                loading="eager"
+                onLoad={() => setImgLoaded(true)}
+                onError={e => { e.currentTarget.src = defaultLawyerImg; setImgLoaded(true); }}
+                alt={lawyer.name}
+              />
+            </div>
             <div className="mt-6 text-center w-full">
               <div className="flex items-center justify-center gap-2">
                 <h2 className="text-2xl font-bold text-[#6e4e13] drop-shadow">{lawyer.name}</h2>
@@ -108,7 +119,16 @@ export default function LawyerProfilePage() {
               <span className="font-medium">Availabile Times:</span>
             </div>
             {loadingSlots ? (
-              <p>Loading slots...</p>
+              <div className="flex flex-col gap-2">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="flex items-center gap-2 animate-pulse">
+                    <div className="w-24 h-5 rounded bg-white/30" />
+                    <div className="flex gap-1">
+                      {[1, 2, 3].map(j => <div key={j} className="w-16 h-7 rounded bg-yellow-200/50" />)}
+                    </div>
+                  </div>
+                ))}
+              </div>
             ) : (
               <div className="flex flex-col gap-2">
                 {availability.map((day) => (
