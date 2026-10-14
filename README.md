@@ -2,7 +2,7 @@ Project Overview
 
 LegalEase is a web-based legal consultation platform that connects clients with lawyers and allows users to browse lawyer profiles and manage consultation appointments online.
 
-Features
+Features : 
 
     User registration and login
     Browse lawyers and view lawyer profiles
@@ -11,7 +11,7 @@ Features
     Online payments using Stripe
     Password reset with OTP verification
 
-Technologies Used
+Technologies Used : 
 
     React
     JavaScript
